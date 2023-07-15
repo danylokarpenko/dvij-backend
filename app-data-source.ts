@@ -8,8 +8,10 @@ const AppDataSource = new DataSource({
   password: 'postgres',
   database: 'dvij',
   synchronize: false,
-  entities: ['dist/src/modules/**/*{.js,.ts}'],
-  migrations: ['dist/src/migrations/**/*{.js,.ts}'],
+  entities: ['dist/src/modules/**/*.entity{.js,.ts}'],
+  migrations: ['dist/src/migrations/*{.js,.ts}'],
+  migrationsRun: true,
+  logging: true,
 });
 
 export default AppDataSource;

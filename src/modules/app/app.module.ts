@@ -2,8 +2,13 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from '../users/user.entity';
 import { UsersModule } from '../users/users.module';
+import { SkillsModule } from '../skills/skills.module';
+import { EventsModule } from '../events/events.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AchievementsModule } from '../achievements/achievements.module';
+import { AuthModule } from '../auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,12 +19,17 @@ import { UsersModule } from '../users/users.module';
       username: 'postgres',
       password: 'postgres',
       database: 'dvij',
-      entities: [UserEntity],
+      entities: ['dist/src/modules/**/*.entity.js'],
       migrations: ['dist/migrations/*.js'], // Path to your migrations directory
       migrationsRun: true,
     }),
-    TypeOrmModule.forFeature([UserEntity]),
+    ConfigModule.forRoot(),
+    EventEmitterModule.forRoot(),
     UsersModule,
+    SkillsModule,
+    EventsModule,
+    AchievementsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

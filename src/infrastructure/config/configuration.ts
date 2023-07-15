@@ -30,13 +30,7 @@ export const configuration = () => ({
       ),
     },
   },
-  sendGrid: {
-    apiKey: getOsEnvVar('SEND_GRID_KEY'),
-    fromEmail: getOsEnvVar('SEND_GRID_FROM_EMAIL'),
-    accountActivationTemplateId: getOsEnvVar(
-      'SEND_GRID_ACCOUNT_ACTIVATION_TEMPLATE_ID',
-    ),
-  },
+  JWT_SECRET: getOsEnvVar('JWT_SECRET'),
   externalLinks: {
     employeeActivationAppLink: getOsEnvVar('EMPLOYEE_ACTIVATION_APP_LINK'), // link to employee mobile application
   },

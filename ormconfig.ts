@@ -18,8 +18,8 @@ module.exports = {
   username: process.env.TYPEORM_DATABASE_USERNAME,
   database: process.env.TYPEORM_DATABASE_NAME,
   password: process.env.TYPEORM_DATABASE_PASSWORD,
-  entities: ['dist/src/modules/**/*{.js,.ts}'],
-  migrations: ['dist/src/migrations/**/*{.js,.ts}'],
+  entities: ['dist/src/modules/**/*.entity{.js,.ts}'],
+  migrations: ['dist/src/migrations/*{.js,.ts}'],
   migrationsRun: true,
   cli: {
     migrationsDir: process.env.TYPEORM_MIGRATIONS_DIR,

@@ -18,6 +18,7 @@ async function bootstrap() {
     .setDescription('API')
     .setVersion('1.0')
     .addTag('xD')
+    .addBearerAuth()
     .build();
 
   // Create a Swagger document
