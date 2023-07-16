@@ -75,8 +75,6 @@ export class UserEntity extends ParentEntity {
     inverseJoinColumns: [{ name: 'skillId' }],
   })
   skills: SkillEntity[];
-  @RelationId((user: UserEntity) => user.skills)
-  skillIds: number[];
 
   @ManyToMany(() => AchievementEntity, (achievement) => achievement.users, {
     cascade: true,
@@ -87,8 +85,6 @@ export class UserEntity extends ParentEntity {
     inverseJoinColumns: [{ name: 'achievementId' }],
   })
   achievements: AchievementEntity[];
-  @RelationId((user: UserEntity) => user.achievements)
-  achievementIds: number[];
 
   @ManyToMany(() => EventEntity, (event) => event.users)
   @JoinTable({
@@ -97,8 +93,6 @@ export class UserEntity extends ParentEntity {
     inverseJoinColumns: [{ name: 'eventId' }],
   })
   events: EventEntity[];
-  @RelationId((user: UserEntity) => user.events)
-  eventIds: number[];
 
   @OneToMany(() => UserFriendsEntity, (userFriend) => userFriend.friend)
   public friends: UserFriendsEntity[];

@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UserEntity } from '../users/user.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SignupDto } from './dto/signup.dto';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -13,14 +15,15 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login to account' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  // eslint-disable-next-line
+  async login(@Request() req, @Body() _user: LoginDto) {
     return this.authService.login(req);
   }
 
   @ApiOperation({ summary: 'Sign Up' })
   @ApiResponse({ status: 200, description: 'Sign up new user' })
   @Post('/signup')
-  async createUser(@Body() userPayload): Promise<UserEntity> {
+  async createUser(@Body() userPayload: SignupDto): Promise<UserEntity> {
     const result = await this.authService.signUp(userPayload);
     return result;
   }

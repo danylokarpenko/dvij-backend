@@ -18,7 +18,17 @@ async function bootstrap() {
     .setDescription('API')
     .setVersion('1.0')
     .addTag('xD')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
 
   // Create a Swagger document

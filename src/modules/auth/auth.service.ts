@@ -4,6 +4,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
+import { SignupDto } from './dto/signup.dto';
 
 @Injectable()
 export class AuthService {
@@ -40,7 +41,7 @@ export class AuthService {
     };
   }
 
-  async signUp(userPayload) {
+  async signUp(userPayload: SignupDto) {
     const saltOrRounds = 10;
     const { password, ...userData } = userPayload;
     const passwordHash = await bcrypt.hash(password, saltOrRounds);

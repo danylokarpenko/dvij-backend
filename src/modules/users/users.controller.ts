@@ -8,7 +8,7 @@ import {
   Delete,
   Req,
   ParseIntPipe,
-  // UseGuards,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -22,7 +22,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AddFriendDto } from './dto/add-friend.dto';
 import { UpdateFriendInfoDto } from './dto/update-friend-info.dto';
-// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -51,7 +51,8 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Start screen' })
   @ApiResponse({ status: 200, description: 'Get user start screen info' })
   @Get('/start-screen')
@@ -76,9 +77,11 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Update friend' })
   @ApiResponse({ status: 200, description: 'Update friend info' })
-  @Patch(':friendId')
+  @Patch('friends/:friendId')
   updateFriend(
     @Param('friendId', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateFriendInfoDto,
