@@ -9,5 +9,11 @@ export class UpdateEventDto extends PartialType(CreateEventDto) {
   description: string;
 
   @ApiProperty()
+  isCompetition: boolean;
+
+  @ApiProperty()
+  winnerId: number;
+
+  @ApiProperty()
   date: Date;
 }

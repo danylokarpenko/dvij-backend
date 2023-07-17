@@ -93,6 +93,8 @@ export class UserEntity extends ParentEntity {
     inverseJoinColumns: [{ name: 'eventId' }],
   })
   events: EventEntity[];
+  @RelationId((user: UserEntity) => user.events)
+  eventIds: number[];
 
   @OneToMany(() => UserFriendsEntity, (userFriend) => userFriend.friend)
   public friends: UserFriendsEntity[];

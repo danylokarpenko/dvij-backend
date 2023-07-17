@@ -23,9 +23,20 @@ export class EventEntity extends ParentEntity {
   @Column()
   date: Date;
 
+  @Column({ default: false })
+  isCompetition: boolean;
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn()
+  winner: UserEntity;
+  @Column({ unique: false, nullable: true })
+  winnerId: number;
+
   @OneToOne(() => UserEntity)
   @JoinColumn()
   creator: UserEntity;
+  @Column({ unique: false })
+  creatorId: number;
 
   @ManyToMany(() => UserEntity, (user) => user.events)
   users: UserEntity[];

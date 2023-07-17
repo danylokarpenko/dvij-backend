@@ -4,6 +4,8 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventEntity } from './event.entity';
 import { Repository } from 'typeorm';
+import { GetEventQueryDto } from './dto/get-event-query.dto';
+import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 
 @Injectable()
 export class EventsService {
@@ -12,12 +14,23 @@ export class EventsService {
     private eventsRepository: Repository<EventEntity>,
   ) {}
 
-  create(createEventDto: CreateEventDto) {
-    return this.eventsRepository.create(createEventDto).save();
+  create(createEventDto: CreateEventDto, req: IRequest) {
+    const data = { ...createEventDto, creatorId: req.user.id };
+    return this.eventsRepository.create(data).save();
   }
 
-  findAll() {
-    return this.eventsRepository.find();
+  findAll(query: GetEventQueryDto, req: IRequest) {
+    const { creatorId } = query;
+    const {
+      user: { id: currentUserId },
+    } = req;
+    const userId = creatorId || currentUserId;
+
+    return this.eventsRepository.find({
+      where: {
+        ...(creatorId && { creatorId: userId }),
+      },
+    });
   }
 
   findOne(id: number) {

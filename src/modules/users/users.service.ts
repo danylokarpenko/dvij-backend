@@ -68,13 +68,13 @@ export class UsersService {
   }
 
   async getStartScreenInfo(req) {
-    // const {
-    //   user: { id = 5 },
-    // } = req;
+    const {
+      user: { id },
+    } = req;
 
     const user = await this.usersRepository
       .createQueryBuilder('users')
-      .where({ id: 5 })
+      .where({ id })
       .select([
         'users',
         'friends.id',
@@ -90,17 +90,16 @@ export class UsersService {
 
     const respect = await this.userFriendsRepository
       .createQueryBuilder('userFriends')
-      .where({ friendId: 5 })
-      .select('SUM(userFriends.respect)', 'totalRespect')
+      .where({ friendId: id })
+      .select('SUM(userFriends.respect)', 'totalRespectCount')
       .addSelect('count(userFriends.id)', 'totalFriendsCount')
       .getRawOne();
 
-    // here
-
     return {
       ...user,
-      respect: parseInt(respect.totalRespect),
+      totalRespectCount: parseInt(respect.totalRespectCount),
       totalFriendsCount: parseInt(respect.totalFriendsCount),
+      totalEventsCount: parseInt(respect.totalFriendsCount),
     };
   }
 

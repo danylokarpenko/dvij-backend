@@ -8,5 +8,11 @@ export class CreateEventDto {
   description: string;
 
   @ApiProperty()
+  isCompetition: boolean;
+
+  @ApiProperty()
+  winnerId: number;
+
+  @ApiProperty()
   date: Date;
 }
