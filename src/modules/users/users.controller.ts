@@ -9,6 +9,7 @@ import {
   Req,
   ParseIntPipe,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -23,6 +24,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AddFriendDto } from './dto/add-friend.dto';
 import { UpdateFriendInfoDto } from './dto/update-friend-info.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { FindUsersDto } from './dto/find-users.dto';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -47,8 +49,8 @@ export class UsersController {
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, description: 'Returns all users.' })
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() query: FindUsersDto) {
+    return this.usersService.findAll(query);
   }
 
   @UseGuards(JwtAuthGuard)

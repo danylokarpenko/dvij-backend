@@ -26,6 +26,15 @@ export class EventEntity extends ParentEntity {
   @Column({ default: false })
   isCompetition: boolean;
 
+  @Column()
+  avatarUrl: string;
+
+  @Column({ type: 'numeric' })
+  lat: number;
+
+  @Column({ type: 'numeric' })
+  lng: number;
+
   @OneToOne(() => UserEntity)
   @JoinColumn()
   winner: UserEntity;

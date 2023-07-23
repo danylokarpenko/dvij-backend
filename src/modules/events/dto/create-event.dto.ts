@@ -15,4 +15,13 @@ export class CreateEventDto {
 
   @ApiProperty()
   date: Date;
+
+  @ApiProperty()
+  avatarUrl: string;
+
+  @ApiProperty()
+  lat: number;
+
+  @ApiProperty()
+  lng: number;
 }

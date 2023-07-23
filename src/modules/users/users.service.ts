@@ -10,6 +10,8 @@ import { UserFriendsEntity } from '../userFriends/userFriends.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateFriendInfoDto } from './dto/update-friend-info.dto';
 import { IRequest } from 'src/infrastructure/interfaces/request.interface';
+import { FindUsersDto } from './dto/find-users.dto';
+import { queryToFindOperators } from 'src/infrastructure/utils/queryToFindOperators.util';
 
 @Injectable()
 export class UsersService {
@@ -63,8 +65,8 @@ export class UsersService {
     return true;
   }
 
-  findAll() {
-    return this.usersRepository.find();
+  findAll(query: FindUsersDto) {
+    return this.usersRepository.find({ where: queryToFindOperators(query) });
   }
 
   async getStartScreenInfo(req) {
