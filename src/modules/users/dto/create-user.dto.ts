@@ -10,6 +10,8 @@ export class CreateUserDto {
   @ApiProperty()
   email: string;
   @ApiProperty()
+  phone: string;
+  @ApiProperty()
   avatarUrl: string;
   @ApiProperty()
   rating: number;

@@ -9,6 +9,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AchievementsModule } from '../achievements/achievements.module';
 import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { WebsocketsModule } from '../WebSocketsModule/websockets.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ConfigModule } from '@nestjs/config';
     EventsModule,
     AchievementsModule,
     AuthModule,
+    WebsocketsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

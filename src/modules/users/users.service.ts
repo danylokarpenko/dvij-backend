@@ -12,6 +12,9 @@ import { UpdateFriendInfoDto } from './dto/update-friend-info.dto';
 import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 import { FindUsersDto } from './dto/find-users.dto';
 import { queryToFindOperators } from 'src/infrastructure/utils/queryToFindOperators.util';
+import { SignupDto } from '../auth/dto/signup.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -33,6 +36,34 @@ export class UsersService {
 
   create(createUserDto: CreateUserDto) {
     return this.usersRepository.create(createUserDto).save();
+  }
+
+  register(createUserDto: RegisterUserDto) {
+    return this.usersRepository.create(createUserDto).save();
+  }
+
+  async uploadAvatar(req: IRequest, avatar) {
+    const user = await this.usersRepository.findOne({
+      where: { id: req.user.id },
+    });
+    if (!user) {
+      throw 'User not found';
+    }
+    const formData = new FormData();
+    formData.append('image', avatar.buffer.toString('base64'));
+    // const { data: imageData } = await firstValueFrom(
+    //   this.httpService
+    //     .post(
+    //       `https://api.imgbb.com/1/upload?expiration=600&key=${process.env.IMG_API_KEY}`,
+    //       formData,
+    //     )
+    //     .pipe(
+    //       catchError((error: AxiosError) => {
+    //         throw error;
+    //       }),
+    //     ),
+    // );
+    // user.updateOne({ avatar: imageData.data.url }).exec();
   }
 
   async addToFriend({ userId, addedUserId }: AddFriendDto) {

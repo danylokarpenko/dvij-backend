@@ -40,14 +40,7 @@ export class AuthService {
     const saltOrRounds = 10;
     const { password, ...userData } = userPayload;
     const passwordHash = await bcrypt.hash(password, saltOrRounds);
-    const result = await this.usersService.create({
-      ...userData,
-      // will be registered(true) when smb invite the user(add to friend)
-      registered: false,
-      passwordHash,
-    });
-    const user = this.usersService.findOne(result.id);
-    return user;
+    return this.usersService.register({ ...userData, passwordHash });
   }
 
   async generateToken(payload: any, expiresTime = '5h') {

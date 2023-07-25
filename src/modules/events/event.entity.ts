@@ -26,13 +26,13 @@ export class EventEntity extends ParentEntity {
   @Column({ default: false })
   isCompetition: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   avatarUrl: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', nullable: true })
   lat: number;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', nullable: true })
   lng: number;
 
   @OneToOne(() => UserEntity)

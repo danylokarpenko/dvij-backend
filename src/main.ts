@@ -2,9 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './modules/app/app.module';
 import AppDataSource from '../app-data-source';
+import { WsAdapter } from './infrastructure/adapters/ws-adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useWebSocketAdapter(new WsAdapter(app));
+
   AppDataSource.initialize()
     .then(() => {
       console.log('Data Source has been initialized!');

@@ -10,6 +10,11 @@ import {
   ParseIntPipe,
   UseGuards,
   Query,
+  UploadedFile,
+  UseInterceptors,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,6 +22,8 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,12 +32,48 @@ import { AddFriendDto } from './dto/add-friend.dto';
 import { UpdateFriendInfoDto } from './dto/update-friend-info.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FindUsersDto } from './dto/find-users.dto';
+import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 
 @ApiTags('users')
 @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './files',
+        filename: (req, file, cb) => {
+          const fileNameSplit = file.originalname.split('.');
+          const fileExt = fileNameSplit[fileNameSplit.length - 1];
+          cb(null, `${Date.now()}.${fileExt}`);
+        },
+      }),
+    }),
+  )
+  @ApiOperation({ summary: 'Upload file' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'https://www.c-sharpcorner.com/article/upload-files-or-images-to-server-using-node-js/',
+  })
+  @Post('/upload-avatar')
+  uploadAvatar(
+    @Req() req,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    console.log(file);
+    this.usersService.uploadAvatar(req, file);
+  }
 
   @ApiOperation({ summary: 'Add friend' })
   @ApiResponse({ status: 200, description: 'Add friend to user.' })
@@ -58,7 +101,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Start screen' })
   @ApiResponse({ status: 200, description: 'Get user start screen info' })
   @Get('/start-screen')
-  getStartScreenInfo(@Req() req) {
+  getStartScreenInfo(@Req() req: IRequest) {
     return this.usersService.getStartScreenInfo(req);
   }
 

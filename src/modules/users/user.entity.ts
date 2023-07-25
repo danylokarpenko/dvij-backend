@@ -20,44 +20,47 @@ export class UserEntity extends ParentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   firstName: string;
 
-  @Column()
+  @Column({ nullable: true })
   lastName: string;
 
-  @Column()
+  @Column({ nullable: false })
   username: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
+
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ type: 'numeric', nullable: true })
+  lat: number;
+
+  @Column({ type: 'numeric', nullable: true })
+  lng: number;
 
   @Column({ nullable: false, select: false })
   passwordHash: string;
 
-  @Column()
+  @Column({ nullable: true })
   avatarUrl: string;
 
   @Column({ nullable: true })
   aiAvatarUrl: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'numeric', nullable: true })
   rating: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', default: 0 })
   restrictionLvl: number;
 
-  @Column()
+  @Column({ nullable: true })
   defaultLocation: string;
 
-  @Column()
+  @Column({ nullable: true })
   currentLocation: string;
-
-  @Column({ type: 'numeric' })
-  lat: number;
-
-  @Column({ type: 'numeric' })
-  lng: number;
 
   @OneToOne(() => UserEntity)
   @JoinColumn()

@@ -5,6 +5,7 @@ import { UserEntity } from '../users/user.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { SchemaValidationPipe } from 'src/infrastructure/pipes/schema_validation.pipe';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -23,7 +24,9 @@ export class AuthController {
   @ApiOperation({ summary: 'Sign Up' })
   @ApiResponse({ status: 200, description: 'Sign up new user' })
   @Post('/signup')
-  async createUser(@Body() userPayload: SignupDto): Promise<UserEntity> {
+  async createUser(
+    @Body(new SchemaValidationPipe(SignupDto)) userPayload: SignupDto,
+  ): Promise<UserEntity> {
     const result = await this.authService.signUp(userPayload);
     return result;
   }
