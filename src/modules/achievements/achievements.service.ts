@@ -26,13 +26,8 @@ export class AchievementsService {
       where: { id: userId },
       relations: ['achievements'],
     });
-    user.achievements.push(
-      AchievementEntity.create({
-        name: 'qwe',
-        key: 'qwe',
-      }),
-    );
-    return await UserEntity.update(userId, user);
+    user.achievements.push(achievement);
+    return await UserEntity.save(user);
   }
 
   create(createAchievementDto: CreateAchievementDto) {

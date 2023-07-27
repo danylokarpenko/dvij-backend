@@ -8,16 +8,19 @@ export class Init1688461616152 implements MigrationInterface {
       `CREATE TABLE "skills" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_0d3212120f4ecedf90864d7e298" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
+      `CREATE TABLE "places" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "photoUrl" character varying, "lat" numeric, "lng" numeric, "creatorId" integer, CONSTRAINT "REL_3be8f124c37385b25a898a45ed" UNIQUE ("creatorId"), CONSTRAINT "PK_1afab86e226b4c3bc9a74465c12" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "events" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "date" TIMESTAMP NOT NULL, "isCompetition" boolean NOT NULL DEFAULT false, "avatarUrl" character varying, "lat" numeric, "lng" numeric, "winnerId" integer, "creatorId" integer NOT NULL, "placeId" integer, CONSTRAINT "REL_e5829fd74e2a1be58b570c1725" UNIQUE ("winnerId"), CONSTRAINT "REL_c621508a2b84ae21d3f971cdb4" UNIQUE ("creatorId"), CONSTRAINT "REL_359b48411878a60ae7df2d5f25" UNIQUE ("placeId"), CONSTRAINT "PK_40731c7151fe4be3116e45ddf73" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "userFriends" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "userId" integer NOT NULL, "friendId" integer NOT NULL, "respect" integer, "givenName" character varying, CONSTRAINT "PK_8731643271cd26c0c9fd49acfef" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "users" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "firstName" character varying, "lastName" character varying, "username" character varying NOT NULL, "email" character varying, "phone" character varying, "lat" numeric, "lng" numeric, "passwordHash" character varying NOT NULL, "avatarUrl" character varying, "aiAvatarUrl" character varying, "rating" numeric, "restrictionLvl" integer NOT NULL DEFAULT '0', "defaultLocation" character varying, "currentLocation" character varying, "refId" integer, "registered" boolean NOT NULL DEFAULT false, CONSTRAINT "REL_bb3f79687322b82f4b7c5ba17b" UNIQUE ("refId"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
       `CREATE TABLE "achievements" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying NOT NULL, "key" character varying NOT NULL, CONSTRAINT "PK_1bc19c37c6249f70186f318d71d" PRIMARY KEY ("id"))`,
-    );
-    await queryRunner.query(
-      `CREATE TABLE "userFriends" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "userId" integer NOT NULL, "friendId" integer NOT NULL, "respect" integer, CONSTRAINT "PK_8731643271cd26c0c9fd49acfef" PRIMARY KEY ("id"))`,
-    );
-    await queryRunner.query(
-      `CREATE TABLE "users" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "firstName" character varying NOT NULL, "lastName" character varying NOT NULL, "username" character varying NOT NULL, "email" character varying NOT NULL, "passwordHash" character varying NOT NULL, "avatarUrl" character varying NOT NULL, "rating" numeric NOT NULL, "restrictionLvl" integer NOT NULL, "defaultLocation" character varying NOT NULL, "currentLocation" character varying NOT NULL, "lat" numeric NOT NULL, "lng" numeric NOT NULL, "refId" integer NOT NULL, "registered" boolean NOT NULL DEFAULT false, CONSTRAINT "REL_bb3f79687322b82f4b7c5ba17b" UNIQUE ("refId"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
-    );
-    await queryRunner.query(
-      `CREATE TABLE "events" ("createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "date" TIMESTAMP NOT NULL, "creatorId" integer, CONSTRAINT "REL_c621508a2b84ae21d3f971cdb4" UNIQUE ("creatorId"), CONSTRAINT "PK_40731c7151fe4be3116e45ddf73" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "userSkills" ("userId" integer NOT NULL, "skillId" integer NOT NULL, CONSTRAINT "PK_fa602ec272c0db522ad23e19640" PRIMARY KEY ("userId", "skillId"))`,
@@ -47,6 +50,18 @@ export class Init1688461616152 implements MigrationInterface {
       `CREATE INDEX "IDX_a19a61fca8034371313316ad83" ON "userEvents" ("eventId") `,
     );
     await queryRunner.query(
+      `ALTER TABLE "places" ADD CONSTRAINT "FK_3be8f124c37385b25a898a45ed2" FOREIGN KEY ("creatorId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "events" ADD CONSTRAINT "FK_e5829fd74e2a1be58b570c17257" FOREIGN KEY ("winnerId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "events" ADD CONSTRAINT "FK_c621508a2b84ae21d3f971cdb47" FOREIGN KEY ("creatorId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "events" ADD CONSTRAINT "FK_359b48411878a60ae7df2d5f25e" FOREIGN KEY ("placeId") REFERENCES "places"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+    );
+    await queryRunner.query(
       `ALTER TABLE "userFriends" ADD CONSTRAINT "FK_c62bd60197c24d1b1a295d446e7" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
@@ -54,9 +69,6 @@ export class Init1688461616152 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "users" ADD CONSTRAINT "FK_bb3f79687322b82f4b7c5ba17b7" FOREIGN KEY ("refId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "events" ADD CONSTRAINT "FK_c621508a2b84ae21d3f971cdb47" FOREIGN KEY ("creatorId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
       `ALTER TABLE "userSkills" ADD CONSTRAINT "FK_f79fafe8331cf7d2037a122b206" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE`,
@@ -98,9 +110,6 @@ export class Init1688461616152 implements MigrationInterface {
       `ALTER TABLE "userSkills" DROP CONSTRAINT "FK_f79fafe8331cf7d2037a122b206"`,
     );
     await queryRunner.query(
-      `ALTER TABLE "events" DROP CONSTRAINT "FK_c621508a2b84ae21d3f971cdb47"`,
-    );
-    await queryRunner.query(
       `ALTER TABLE "users" DROP CONSTRAINT "FK_bb3f79687322b82f4b7c5ba17b7"`,
     );
     await queryRunner.query(
@@ -108,6 +117,18 @@ export class Init1688461616152 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "userFriends" DROP CONSTRAINT "FK_c62bd60197c24d1b1a295d446e7"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "events" DROP CONSTRAINT "FK_359b48411878a60ae7df2d5f25e"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "events" DROP CONSTRAINT "FK_c621508a2b84ae21d3f971cdb47"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "events" DROP CONSTRAINT "FK_e5829fd74e2a1be58b570c17257"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "places" DROP CONSTRAINT "FK_3be8f124c37385b25a898a45ed2"`,
     );
     await queryRunner.query(
       `DROP INDEX "public"."IDX_a19a61fca8034371313316ad83"`,
@@ -130,10 +151,11 @@ export class Init1688461616152 implements MigrationInterface {
       `DROP INDEX "public"."IDX_f79fafe8331cf7d2037a122b20"`,
     );
     await queryRunner.query(`DROP TABLE "userSkills"`);
-    await queryRunner.query(`DROP TABLE "events"`);
+    await queryRunner.query(`DROP TABLE "achievements"`);
     await queryRunner.query(`DROP TABLE "users"`);
     await queryRunner.query(`DROP TABLE "userFriends"`);
-    await queryRunner.query(`DROP TABLE "achievements"`);
+    await queryRunner.query(`DROP TABLE "events"`);
+    await queryRunner.query(`DROP TABLE "places"`);
     await queryRunner.query(`DROP TABLE "skills"`);
   }
 }
