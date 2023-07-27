@@ -5,13 +5,14 @@ import {
   ManyToMany,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 import { ParentEntity } from 'src/infrastructure/type/parent.entity';
-import { PlaceEntity } from '../places/place.entity';
+import { EventEntity } from '../events/event.entity';
 
-@Entity('events')
-export class EventEntity extends ParentEntity {
+@Entity('places')
+export class PlaceEntity extends ParentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,14 +22,8 @@ export class EventEntity extends ParentEntity {
   @Column()
   description: string;
 
-  @Column()
-  date: Date;
-
-  @Column({ default: false })
-  isCompetition: boolean;
-
   @Column({ nullable: true })
-  avatarUrl: string;
+  photoUrl: string;
 
   @Column({ type: 'numeric', nullable: true })
   lat: number;
@@ -38,22 +33,10 @@ export class EventEntity extends ParentEntity {
 
   @OneToOne(() => UserEntity)
   @JoinColumn()
-  winner: UserEntity;
-  @Column({ unique: false, nullable: true })
-  winnerId: number;
-
-  @OneToOne(() => UserEntity)
-  @JoinColumn()
   creator: UserEntity;
-  @Column({ unique: false })
+  @Column({ unique: false, nullable: true })
   creatorId: number;
 
-  @OneToOne(() => PlaceEntity)
-  @JoinColumn()
-  place: PlaceEntity;
-  @Column({ unique: false, nullable: true })
-  placeId: number;
-
-  @ManyToMany(() => UserEntity, (user) => user.events)
-  users: UserEntity[];
+  @OneToMany(() => EventEntity, (event) => event.place)
+  events: EventEntity[];
 }

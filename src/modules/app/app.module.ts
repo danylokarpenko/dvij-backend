@@ -10,6 +10,7 @@ import { AchievementsModule } from '../achievements/achievements.module';
 import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { WebsocketsModule } from '../WebSocketsModule/websockets.module';
+import { PlacesModule } from '../places/places.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { WebsocketsModule } from '../WebSocketsModule/websockets.module';
     AchievementsModule,
     AuthModule,
     WebsocketsModule,
+    PlacesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

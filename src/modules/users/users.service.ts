@@ -12,9 +12,7 @@ import { UpdateFriendInfoDto } from './dto/update-friend-info.dto';
 import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 import { FindUsersDto } from './dto/find-users.dto';
 import { queryToFindOperators } from 'src/infrastructure/utils/queryToFindOperators.util';
-import { SignupDto } from '../auth/dto/signup.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UsersService {
