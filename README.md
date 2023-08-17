@@ -1,3 +1,12 @@
+Deploy in remote ubuntu server:
+
+```
+cd Projects/dvij-backend
+git pull
+yarn build
+
+```
+
 ## Migration generate example:
 
 `yarn run mig ./src/migrations/CreateUserEntity`

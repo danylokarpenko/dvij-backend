@@ -1,5 +1,5 @@
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -13,6 +13,8 @@ import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 import { FindUsersDto } from './dto/find-users.dto';
 import { queryToFindOperators } from 'src/infrastructure/utils/queryToFindOperators.util';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { AddTraitDto } from './dto/add-trait.dto';
+import { UserTraitsEntity } from '../userTraits/userTraits.entity';
 
 @Injectable()
 export class UsersService {
@@ -94,6 +96,23 @@ export class UsersService {
     return true;
   }
 
+  async addTraitToUser({ userId, traitId }: AddTraitDto) {
+    const duplicate = await UserTraitsEntity.findOne({
+      where: {
+        userId,
+        traitId,
+      },
+    });
+    if (duplicate) {
+      throw new BadRequestException('Trait is already added to user');
+    }
+    await UserTraitsEntity.create({
+      userId,
+      traitId,
+    }).save();
+    return true;
+  }
+
   findAll(query: FindUsersDto) {
     return this.usersRepository.find({ where: queryToFindOperators(query) });
   }
@@ -110,12 +129,16 @@ export class UsersService {
         'users',
         'friends.id',
         'friends.respect',
+        'traits.id',
+        'traits.traitId',
+        'traits.userId',
         'user.id',
         'user.refId',
         'user.lat',
         'user.lng',
       ])
       .leftJoin('users.friends', 'friends')
+      .leftJoin('users.traits', 'traits')
       .leftJoin('friends.user', 'user')
       .getOne();
 
