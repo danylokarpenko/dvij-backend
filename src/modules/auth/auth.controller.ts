@@ -26,7 +26,7 @@ export class AuthController {
   @Post('/signup')
   async createUser(
     @Body(new SchemaValidationPipe(SignupDto)) userPayload: SignupDto,
-  ): Promise<UserEntity> {
+  ) {
     const result = await this.authService.signUp(userPayload);
     return result;
   }

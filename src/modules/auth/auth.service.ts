@@ -40,7 +40,15 @@ export class AuthService {
     const saltOrRounds = 10;
     const { password, ...userData } = userPayload;
     const passwordHash = await bcrypt.hash(password, saltOrRounds);
-    return this.usersService.register({ ...userData, passwordHash });
+    const user = await this.usersService.register({
+      ...userData,
+      passwordHash,
+    });
+
+    return {
+      access_token: this.jwtService.sign(userPayload),
+      user,
+    };
   }
 
   async generateToken(payload: any, expiresTime = '5h') {
