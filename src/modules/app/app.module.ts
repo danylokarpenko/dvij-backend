@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '../users/users.module';
-import { SkillsModule } from '../skills/skills.module';
+import { TraitsModule } from '../traits/traits.module';
 import { EventsModule } from '../events/events.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AchievementsModule } from '../achievements/achievements.module';
@@ -28,7 +28,7 @@ import { PlacesModule } from '../places/places.module';
     ConfigModule.forRoot(),
     EventEmitterModule.forRoot(),
     UsersModule,
-    SkillsModule,
+    TraitsModule,
     EventsModule,
     AchievementsModule,
     AuthModule,

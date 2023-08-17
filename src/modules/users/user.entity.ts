@@ -4,12 +4,11 @@ import {
   Column,
   ManyToMany,
   JoinTable,
-  RelationId,
   JoinColumn,
   OneToOne,
   OneToMany,
 } from 'typeorm';
-import { SkillEntity } from '../skills/skill.entity';
+import { TraitEntity } from '../traits/trait.entity';
 import { ParentEntity } from 'src/infrastructure/type/parent.entity';
 import { EventEntity } from '../events/event.entity';
 import { AchievementEntity } from '../achievements/achievement.entity';
@@ -71,13 +70,13 @@ export class UserEntity extends ParentEntity {
   @Column({ default: false })
   registered: boolean;
 
-  @ManyToMany(() => SkillEntity, (skill) => skill.users)
+  @ManyToMany(() => TraitEntity, (trait) => trait.users)
   @JoinTable({
-    name: 'userSkills',
+    name: 'usertraits',
     joinColumns: [{ name: 'userId' }],
-    inverseJoinColumns: [{ name: 'skillId' }],
+    inverseJoinColumns: [{ name: 'traitId' }],
   })
-  skills: SkillEntity[];
+  traits: TraitEntity[];
 
   @ManyToMany(() => AchievementEntity, (achievement) => achievement.users, {
     cascade: true,
