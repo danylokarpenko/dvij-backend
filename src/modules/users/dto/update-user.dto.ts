@@ -24,12 +24,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   restrictionLvl: number;
 
   @ApiProperty()
-  defaultLocation: string;
-
-  @ApiProperty()
-  currentLocation: string;
-
-  @ApiProperty()
   registered: boolean;
 
   @ApiProperty()

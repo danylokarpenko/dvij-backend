@@ -56,12 +56,6 @@ export class UserEntity extends ParentEntity {
   @Column({ type: 'int', default: 0 })
   restrictionLvl: number;
 
-  @Column({ nullable: true })
-  defaultLocation: string;
-
-  @Column({ nullable: true })
-  currentLocation: string;
-
   @OneToOne(() => UserEntity)
   @JoinColumn()
   ref: UserEntity;

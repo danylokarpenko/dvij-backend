@@ -18,10 +18,6 @@ export class CreateUserDto {
   @ApiProperty()
   restrictionLvl: number;
   @ApiProperty()
-  defaultLocation: string;
-  @ApiProperty()
-  currentLocation: string;
-  @ApiProperty()
   refId: number;
   @ApiProperty()
   registered: boolean;
