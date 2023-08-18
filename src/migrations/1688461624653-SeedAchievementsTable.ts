@@ -16,6 +16,7 @@ const achievements = [
     key: AchievementKey.DvijCreated,
   },
 ];
+
 export class SeedAchievementsTable1688461624653 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     for (const achievement of achievements) {

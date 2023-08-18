@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { ParentEntity } from 'src/infrastructure/type/parent.entity';
 import { UserEntity } from '../users/user.entity';
-import { TraitEntity } from '../traits/trait.entity';
+import { KingdomEntity } from '../kingdoms/kingdom.entity';
 
-@Entity('userTraits')
-export class UserTraitsEntity extends ParentEntity {
+@Entity('userKingdoms')
+export class UserKingdomsEntity extends ParentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,11 +12,11 @@ export class UserTraitsEntity extends ParentEntity {
   userId: number;
 
   @Column({ nullable: false, unique: false })
-  traitId: number;
+  kingdomId: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.traits)
+  @ManyToOne(() => UserEntity, (user) => user.kingdoms)
   user: UserEntity;
 
-  @ManyToOne(() => TraitEntity, (trait) => trait.users)
-  trait: TraitEntity;
+  @ManyToOne(() => KingdomEntity, (kingdom) => kingdom.userKingdoms)
+  kingdom: KingdomEntity;
 }

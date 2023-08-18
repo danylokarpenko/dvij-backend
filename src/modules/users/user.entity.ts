@@ -14,6 +14,8 @@ import { EventEntity } from '../events/event.entity';
 import { AchievementEntity } from '../achievements/achievement.entity';
 import { UserFriendsEntity } from '../userFriends/userFriends.entity';
 import { UserTraitsEntity } from '../userTraits/userTraits.entity';
+import { KingdomEntity } from '../kingdoms/kingdom.entity';
+import { UserKingdomsEntity } from '../userKingdoms/userKingdom.entity';
 
 @Entity('users')
 export class UserEntity extends ParentEntity {
@@ -77,6 +79,9 @@ export class UserEntity extends ParentEntity {
     inverseJoinColumns: [{ name: 'achievementId' }],
   })
   achievements: AchievementEntity[];
+
+  @OneToMany(() => UserKingdomsEntity, (userToKingdom) => userToKingdom.user)
+  kingdoms: UserKingdomsEntity[];
 
   @ManyToMany(() => EventEntity, (event) => event.users)
   @JoinTable({

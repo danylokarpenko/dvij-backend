@@ -1,6 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 import { ParentEntity } from 'src/infrastructure/type/parent.entity';
+import { KingdomEntity } from '../kingdoms/kingdom.entity';
 
 @Entity('traits')
 export class TraitEntity extends ParentEntity {
@@ -10,6 +17,9 @@ export class TraitEntity extends ParentEntity {
   @Column()
   name: string;
 
-  @ManyToMany(() => UserEntity, (user) => user.traits)
+  @OneToMany(() => UserEntity, (user) => user.traits)
   users: UserEntity[];
+
+  @OneToMany(() => KingdomEntity, (kingdom) => kingdom.trait)
+  kingdom: KingdomEntity[];
 }

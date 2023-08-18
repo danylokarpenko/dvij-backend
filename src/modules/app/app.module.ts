@@ -11,6 +11,7 @@ import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { WebsocketsModule } from '../WebSocketsModule/websockets.module';
 import { PlacesModule } from '../places/places.module';
+import { KingdomsModule } from '../kingdoms/kingdoms.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PlacesModule } from '../places/places.module';
     EventEmitterModule.forRoot(),
     UsersModule,
     TraitsModule,
+    KingdomsModule,
     EventsModule,
     AchievementsModule,
     AuthModule,

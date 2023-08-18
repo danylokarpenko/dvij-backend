@@ -15,6 +15,9 @@ import { queryToFindOperators } from 'src/infrastructure/utils/queryToFindOperat
 import { RegisterUserDto } from './dto/register-user.dto';
 import { AddTraitDto } from './dto/add-trait.dto';
 import { UserTraitsEntity } from '../userTraits/userTraits.entity';
+import { KingdomsService } from '../kingdoms/kingdoms.service';
+import { TraitsService } from '../traits/traits.service';
+import { UserKingdomsEntity } from '../userKingdoms/userKingdom.entity';
 
 @Injectable()
 export class UsersService {
@@ -24,6 +27,8 @@ export class UsersService {
     @InjectRepository(UserFriendsEntity)
     private userFriendsRepository: Repository<UserFriendsEntity>,
     private eventEmitter: EventEmitter2,
+    private readonly kingdomsService: KingdomsService,
+    private readonly traitsService: TraitsService,
   ) {}
 
   findByUsernameWithPassword(username: string): Promise<UserEntity> {
@@ -96,6 +101,25 @@ export class UsersService {
     return true;
   }
 
+  async _createKingdom(traitId, userId) {
+    const trait = await this.traitsService.findOne(traitId);
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+    const createdKingdom = await this.kingdomsService.create({
+      traitId,
+      name: trait.name,
+      lat: Number(user.lat) + 10,
+      lng: Number(user.lng) + 10,
+    });
+    const userTrait = await UserTraitsEntity.findOne({ where: { traitId } });
+    await UserKingdomsEntity.create({
+      userId: userTrait.userId,
+      kingdomId: createdKingdom.id,
+    }).save();
+    return createdKingdom;
+  }
+
   async addTraitToUser({ userId, traitId }: AddTraitDto) {
     const duplicate = await UserTraitsEntity.findOne({
       where: {
@@ -106,10 +130,35 @@ export class UsersService {
     if (duplicate) {
       throw new BadRequestException('Trait is already added to user');
     }
+
+    const kingdomByTraitId = await this.kingdomsService.findOneBy({ traitId });
+    const traitsCount = await UserTraitsEntity.count({
+      where: { traitId },
+    });
+
+    let createdKingdomId;
+    const shouldCreateKingdomDueToSecondTrait = traitsCount === 1;
+
     await UserTraitsEntity.create({
       userId,
       traitId,
     }).save();
+
+    if (!kingdomByTraitId && shouldCreateKingdomDueToSecondTrait) {
+      const createdKingdom = await this._createKingdom(traitId, userId);
+
+      createdKingdomId = createdKingdom.id;
+    }
+
+    const shouldAddUserToKingdom =
+      traitsCount !== 0 && (kingdomByTraitId || createdKingdomId);
+    if (shouldAddUserToKingdom) {
+      await UserKingdomsEntity.create({
+        userId,
+        kingdomId: kingdomByTraitId?.id || createdKingdomId,
+      }).save();
+    }
+
     return true;
   }
 
@@ -132,13 +181,20 @@ export class UsersService {
         'traits.id',
         'traits.traitId',
         'traits.userId',
+        'kingdoms.id',
         'user.id',
         'user.refId',
         'user.lat',
         'user.lng',
+        'kingdom.id',
+        'kingdom.name',
+        'kingdom.lat',
+        'kingdom.lng',
       ])
       .leftJoin('users.friends', 'friends')
       .leftJoin('users.traits', 'traits')
+      .leftJoin('users.kingdoms', 'kingdoms')
+      .leftJoin('kingdoms.kingdom', 'kingdom')
       .leftJoin('friends.user', 'user')
       .getOne();
 

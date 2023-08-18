@@ -5,13 +5,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
 import { TraitEntity } from '../traits/trait.entity';
 import { UserFriendsEntity } from '../userFriends/userFriends.entity';
+import { KingdomsService } from '../kingdoms/kingdoms.service';
+import { TraitsService } from '../traits/traits.service';
+import { KingdomEntity } from '../kingdoms/kingdom.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, TraitEntity, UserFriendsEntity]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      TraitEntity,
+      UserFriendsEntity,
+      KingdomEntity,
+    ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
-  exports: [UsersService],
+  providers: [UsersService, KingdomsService, TraitsService],
+  exports: [UsersService, KingdomsService, TraitsService],
 })
 export class UsersModule {}
