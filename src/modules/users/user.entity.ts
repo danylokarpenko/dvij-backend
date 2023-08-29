@@ -13,8 +13,6 @@ import { ParentEntity } from 'src/infrastructure/type/parent.entity';
 import { EventEntity } from '../events/event.entity';
 import { AchievementEntity } from '../achievements/achievement.entity';
 import { UserFriendsEntity } from '../userFriends/userFriends.entity';
-import { UserTraitsEntity } from '../userTraits/userTraits.entity';
-import { KingdomEntity } from '../kingdoms/kingdom.entity';
 import { UserKingdomsEntity } from '../userKingdoms/userKingdom.entity';
 
 @Entity('users')
@@ -67,8 +65,13 @@ export class UserEntity extends ParentEntity {
   @Column({ default: false })
   registered: boolean;
 
-  @OneToMany(() => UserTraitsEntity, (userTrait) => userTrait.user)
-  public traits: UserTraitsEntity[];
+  @ManyToMany(() => TraitEntity, (trait) => trait.users)
+  @JoinTable({
+    name: 'userTraits',
+    joinColumns: [{ name: 'userId' }],
+    inverseJoinColumns: [{ name: 'traitId' }],
+  })
+  public traits: TraitEntity[];
 
   @ManyToMany(() => AchievementEntity, (achievement) => achievement.users, {
     cascade: true,

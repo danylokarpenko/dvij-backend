@@ -162,6 +162,20 @@ export class UsersService {
     return true;
   }
 
+  async getUserTraits(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['traits'],
+      select: ['id', 'traits'],
+    });
+    if (!user) {
+      throw new BadRequestException(`No user with ID ${userId}`);
+    }
+    return user?.traits;
+  }
+
   findAll(query: FindUsersDto) {
     return this.usersRepository.find({ where: queryToFindOperators(query) });
   }
@@ -179,8 +193,7 @@ export class UsersService {
         'friends.id',
         'friends.respect',
         'traits.id',
-        'traits.traitId',
-        'traits.userId',
+        'traits.name',
         'kingdoms.id',
         'user.id',
         'user.refId',

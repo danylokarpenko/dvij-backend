@@ -3,7 +3,8 @@ import { CreateTraitDto } from './dto/create-trait.dto';
 import { UpdateTraitDto } from './dto/update-trait.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TraitEntity } from './trait.entity';
-import { ILike, Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
+import { FindTraitsDto } from './dto/find-traits.dto';
 
 @Injectable()
 export class TraitsService {
@@ -24,8 +25,13 @@ export class TraitsService {
     return this.traitsRepository.create(createTraitDto).save();
   }
 
-  findAll() {
-    return this.traitsRepository.find();
+  findAll(query: FindTraitsDto) {
+    const { name } = query;
+    return this.traitsRepository.find({
+      where: {
+        ...(name && { name: Like(`%${name}%`) }),
+      },
+    });
   }
 
   findOne(id: number) {

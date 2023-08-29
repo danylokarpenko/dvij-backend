@@ -90,6 +90,13 @@ export class UsersController {
     return this.usersService.addTraitToUser(addTraitPayload);
   }
 
+  @ApiOperation({ summary: 'Get traits' })
+  @ApiResponse({ status: 200, description: 'Get user traits' })
+  @Get('/traits/:userId')
+  getUserTraits(@Param('userId', ParseIntPipe) userId: number) {
+    return this.usersService.getUserTraits(userId);
+  }
+
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 200, description: 'Returns user' })
   @Post()

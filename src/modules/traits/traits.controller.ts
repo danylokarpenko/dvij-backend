@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { TraitsService } from './traits.service';
 import { CreateTraitDto } from './dto/create-trait.dto';
 import { UpdateTraitDto } from './dto/update-trait.dto';
+import { FindTraitsDto } from './dto/find-traits.dto';
 
 @ApiTags('traits')
 @Controller('traits')
@@ -28,8 +30,8 @@ export class TraitsController {
   @ApiOperation({ summary: 'Get all traits' })
   @ApiResponse({ status: 200, description: 'Returns all traits.' })
   @Get()
-  findAll() {
-    return this.traitsService.findAll();
+  findAll(@Query() query: FindTraitsDto) {
+    return this.traitsService.findAll(query);
   }
 
   @ApiOperation({ summary: 'Get trait by id' })
