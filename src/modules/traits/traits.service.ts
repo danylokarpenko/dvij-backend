@@ -29,7 +29,7 @@ export class TraitsService {
     const { name } = query;
     return this.traitsRepository.find({
       where: {
-        ...(name && { name: Like(`%${name}%`) }),
+        ...(name && { name: ILike(`%${name}%`) }),
       },
     });
   }

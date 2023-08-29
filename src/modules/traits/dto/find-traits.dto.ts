@@ -1,4 +1,6 @@
-import { PickType } from '@nestjs/swagger';
-import { TraitEntity } from '../trait.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class FindTraitsDto extends PickType(TraitEntity, ['name']) {}
+export class FindTraitsDto {
+  @ApiProperty({ required: false })
+  name: string;
+}
