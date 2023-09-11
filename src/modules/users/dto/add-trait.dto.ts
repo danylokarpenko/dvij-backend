@@ -5,5 +5,5 @@ export class AddTraitDto {
   userId: number;
 
   @ApiProperty()
-  traitId: number;
+  traitName: string;
 }

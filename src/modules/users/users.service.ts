@@ -1,6 +1,6 @@
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './user.entity';
@@ -18,6 +18,7 @@ import { UserTraitsEntity } from '../userTraits/userTraits.entity';
 import { KingdomsService } from '../kingdoms/kingdoms.service';
 import { TraitsService } from '../traits/traits.service';
 import { UserKingdomsEntity } from '../userKingdoms/userKingdom.entity';
+import { TraitEntity } from '../traits/trait.entity';
 
 @Injectable()
 export class UsersService {
@@ -120,7 +121,13 @@ export class UsersService {
     return createdKingdom;
   }
 
-  async addTraitToUser({ userId, traitId }: AddTraitDto) {
+  async addTraitToUser({ userId, traitName }: AddTraitDto) {
+    const traitByName = await this.traitsService.findOneByNameUnique(traitName);
+    let traitId = traitByName?.id;
+    if (!traitByName) {
+      traitId = (await this.traitsService.create({ name: traitName })).id;
+    }
+
     const duplicate = await UserTraitsEntity.findOne({
       where: {
         userId,
