@@ -48,28 +48,18 @@ export class UsersService {
     return this.usersRepository.create(createUserDto).save();
   }
 
-  async uploadAvatar(req: IRequest, avatar) {
+  async uploadAvatar(req: IRequest, avatarFile) {
     const user = await this.usersRepository.findOne({
       where: { id: req.user.id },
     });
     if (!user) {
       throw 'User not found';
     }
-    const formData = new FormData();
-    formData.append('image', avatar.buffer.toString('base64'));
-    // const { data: imageData } = await firstValueFrom(
-    //   this.httpService
-    //     .post(
-    //       `https://api.imgbb.com/1/upload?expiration=600&key=${process.env.IMG_API_KEY}`,
-    //       formData,
-    //     )
-    //     .pipe(
-    //       catchError((error: AxiosError) => {
-    //         throw error;
-    //       }),
-    //     ),
-    // );
-    // user.updateOne({ avatar: imageData.data.url }).exec();
+
+    await this.usersRepository.update(user.id, {
+      avatarUrl: avatarFile.filename,
+    });
+    return this.findOne(user.id);
   }
 
   async addToFriend({ userId, addedUserId }: AddFriendDto) {

@@ -10,11 +10,13 @@ import {
   ParseIntPipe,
   UseGuards,
   Query,
-  // UploadedFile,
-  // UseInterceptors,
-  // FileTypeValidator,
-  // MaxFileSizeValidator,
-  // ParseFilePipe,
+  UploadedFile,
+  UseInterceptors,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+  StreamableFile,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -22,8 +24,11 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-// import { diskStorage } from 'multer';
-// import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { findLastIndex, slice } from 'lodash';
+import { createReadStream, existsSync } from 'fs';
+import { join } from 'path';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -34,6 +39,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FindUsersDto } from './dto/find-users.dto';
 import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 import { AddTraitDto } from './dto/add-trait.dto';
+import { GetFileDto } from './dto/get-file.dto';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -41,40 +47,64 @@ import { AddTraitDto } from './dto/add-trait.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // @UseInterceptors(
-  //   FileInterceptor('file', {
-  //     storage: diskStorage({
-  //       destination: './files',
-  //       filename: (req, file, cb) => {
-  //         const fileNameSplit = file.originalname.split('');
-  //         const fileExt = fileNameSplit[fileNameSplit.length - 1];
-  //         cb(null, `${Date.now()}.${fileExt}`);
-  //       },
-  //     }),
-  //   }),
-  // )
-  // @ApiOperation({ summary: 'Upload file' })
-  // @ApiResponse({
-  //   status: 200,
-  //   description:
-  //     'https://www.c-sharpcorner.com/article/upload-files-or-images-to-server-using-node-js/',
-  // })
-  // @Post('/upload-avatar')
-  // uploadAvatar(
-  //   @Req() req,
-  //   @UploadedFile(
-  //     new ParseFilePipe({
-  //       validators: [
-  //         new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-  //         new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
-  //       ],
-  //     }),
-  //   )
-  //   file: Express.Multer.File,
-  // ) {
-  //   console.log(file);
-  //   this.usersService.uploadAvatar(req, file);
-  // }
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './files',
+        filename: (req: IRequest, file, cb) => {
+          const fileNameSplit = file.originalname.split('');
+          const lastDotIndex = findLastIndex(fileNameSplit, (s) => s === '.');
+          const fileExt = slice(
+            fileNameSplit,
+            lastDotIndex + 1,
+            fileNameSplit.length,
+          ).join('');
+
+          cb(null, `user_${req.user.id}_${Date.now()}.${fileExt}`);
+        },
+      }),
+    }),
+  )
+  @ApiOperation({ summary: 'Upload file' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'https://www.c-sharpcorner.com/article/upload-files-or-images-to-server-using-node-js/',
+  })
+  @Post('/upload-avatar')
+  uploadAvatar(
+    @Req() req,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 40 }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.usersService.uploadAvatar(req, file);
+  }
+
+  @Get('/get-file')
+  @ApiOperation({ summary: 'Get file' })
+  @ApiResponse({
+    status: 200,
+    description: 'Download the file by name',
+  })
+  getFile(@Query() query: GetFileDto): StreamableFile | BadRequestException {
+    const filePth = join(process.cwd(), `/files/${query.name}`);
+    const isAvatarExist = existsSync(filePth);
+    if (!isAvatarExist) {
+      throw new BadRequestException(`No file exist with name '${query.name}'`);
+    }
+
+    const file = createReadStream(filePth);
+    return new StreamableFile(file);
+  }
 
   @ApiOperation({ summary: 'Add friend' })
   @ApiResponse({ status: 200, description: 'Add friend to user' })
