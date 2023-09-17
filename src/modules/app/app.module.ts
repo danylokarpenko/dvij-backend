@@ -9,9 +9,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AchievementsModule } from '../achievements/achievements.module';
 import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { WebsocketsModule } from '../WebSocketsModule/websockets.module';
 import { PlacesModule } from '../places/places.module';
 import { KingdomsModule } from '../kingdoms/kingdoms.module';
+import { KingdomChatGatewayModule } from '../WebSocketModules/KingdomMessages/kingdom-chat.module';
+import { KingdomMessagesModule } from '../kingdomMessages/kingdomMessages.module';
 
 @Module({
   imports: [
@@ -34,8 +35,9 @@ import { KingdomsModule } from '../kingdoms/kingdoms.module';
     EventsModule,
     AchievementsModule,
     AuthModule,
-    WebsocketsModule,
+    KingdomChatGatewayModule,
     PlacesModule,
+    KingdomMessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

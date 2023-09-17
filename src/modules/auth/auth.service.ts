@@ -71,4 +71,16 @@ export class AuthService {
       return false;
     }
   }
+
+  public async getUserFromAuthenticationToken(token: string) {
+    const payload = this.jwtService.verify(token, {
+      secret: process.env.JWT_SECRET,
+    });
+
+    const userId = payload.sub;
+
+    if (userId) {
+      return this.usersService.findOne(userId);
+    }
+  }
 }

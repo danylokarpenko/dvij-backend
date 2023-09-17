@@ -8,15 +8,13 @@ export class UserTraitsEntity extends ParentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ManyToOne(() => UserEntity, (user) => user.traits)
+  user: UserEntity;
   @Column({ nullable: false, unique: false })
   userId: number;
 
-  @Column({ nullable: false, unique: false })
-  traitId: number;
-
-  @ManyToOne(() => UserEntity, (user) => user.traits)
-  user: UserEntity;
-
   @ManyToOne(() => TraitEntity, (trait) => trait.users)
   trait: TraitEntity;
+  @Column({ nullable: false, unique: false })
+  traitId: number;
 }
