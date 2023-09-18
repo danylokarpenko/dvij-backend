@@ -23,6 +23,7 @@ export class KingdomChatGateway {
   ) {}
 
   async handleConnection(socket, metaData) {
+    console.log('handleConnection');
     await this.kingdomChatService.getUserFromSocket(socket, metaData);
   }
 

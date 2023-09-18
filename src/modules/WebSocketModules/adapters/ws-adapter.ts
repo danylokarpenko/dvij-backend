@@ -4,7 +4,6 @@ import {
   MessageMappingProperties,
   OnGatewayDisconnect,
   OnGatewayInit,
-  SubscribeMessage,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Observable, fromEvent, EMPTY } from 'rxjs';
@@ -17,14 +16,20 @@ export class WsAdapter
   constructor(private app: INestApplicationContext) {}
   wsClients = [];
   afterInit() {
+    console.log('Init');
+
     this.server.emit('testing', { do: 'stuff' });
   }
 
   handleConnection(client: any) {
+    console.log('handleConnection');
+
     this.wsClients.push(client);
   }
 
   handleDisconnect(client) {
+    console.log('handleDisconnect');
+
     for (let i = 0; i < this.wsClients.length; i++) {
       if (this.wsClients[i] === client) {
         this.wsClients.splice(i, 1);
@@ -34,6 +39,8 @@ export class WsAdapter
     this.broadcast('disconnect', {});
   }
   private broadcast(event, message: any) {
+    console.log('broadcast');
+
     const broadCastMessage = JSON.stringify(message);
     for (const c of this.wsClients) {
       c.send(event, broadCastMessage);
@@ -41,10 +48,14 @@ export class WsAdapter
   }
 
   create(port: number, options: any = {}): any {
+    console.log('create');
+
     return new WebSocket.Server({ port, ...options });
   }
 
   bindClientConnect(server, callback) {
+    console.log('bindClientConnect');
+
     server.on('connection', callback);
   }
 
@@ -53,6 +64,8 @@ export class WsAdapter
     handlers: MessageMappingProperties[],
     process: (data: any) => Observable<any>,
   ) {
+    console.log('bindMessageHandlers');
+
     fromEvent(client, 'message')
       .pipe(
         mergeMap((data) => this.bindMessageHandler(data, handlers, process)),
