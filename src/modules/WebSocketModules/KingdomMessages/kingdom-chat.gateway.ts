@@ -12,7 +12,7 @@ import { UseGuards } from '@nestjs/common';
 import { WsJwtGuard } from 'src/modules/auth/guards/ws-auth.guard';
 import { UserEntity } from 'src/modules/users/user.entity';
 
-@WebSocketGateway(3030)
+@WebSocketGateway(3000)
 export class KingdomChatGateway {
   @WebSocketServer()
   server: Server;
