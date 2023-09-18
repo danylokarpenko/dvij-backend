@@ -1,7 +1,7 @@
 import { getOsPath, getOsEnvVar } from '../utils/env.util';
 
 export const configuration = () => ({
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || 3030,
   host: process.env.HOST || '127.0.0.1',
   appLink: getOsEnvVar('APP_LINK'), // link to current server
   auth: {
