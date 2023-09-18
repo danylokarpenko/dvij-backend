@@ -10,6 +10,7 @@ import {
 import { ParentEntity } from 'src/infrastructure/type/parent.entity';
 import { UserKingdomsEntity } from '../userKingdoms/userKingdom.entity';
 import { TraitEntity } from '../traits/trait.entity';
+import { KingdomMessageEntity } from '../kingdomMessages/kingdomMessage.entity';
 
 @Entity('kingdoms')
 export class KingdomEntity extends ParentEntity {
@@ -33,4 +34,7 @@ export class KingdomEntity extends ParentEntity {
   trait: TraitEntity;
   @Column({ unique: false, nullable: false })
   traitId: number;
+
+  @OneToMany(() => KingdomMessageEntity, (message) => message.kingdom)
+  public messages: KingdomMessageEntity[];
 }

@@ -5,6 +5,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 import { ParentEntity } from 'src/infrastructure/type/parent.entity';
@@ -18,8 +19,7 @@ export class TraitEntity extends ParentEntity {
   @Column()
   name: string;
 
-  @ManyToMany(() => UserEntity, (user) => user.traits)
-  @JoinTable()
+  @ManyToOne(() => UserEntity, (user) => user.traits)
   users: UserEntity[];
 
   @OneToMany(() => KingdomEntity, (kingdom) => kingdom.trait)

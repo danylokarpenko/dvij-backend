@@ -160,17 +160,14 @@ export class UsersService {
   }
 
   async getUserTraits(userId: number) {
-    const user = await this.usersRepository.findOne({
+    const userTraits = await UserTraitsEntity.find({
       where: {
-        id: userId,
+        userId,
       },
-      relations: ['traits'],
-      select: ['id', 'traits'],
+      relations: ['trait'],
     });
-    if (!user) {
-      throw new BadRequestException(`No user with ID ${userId}`);
-    }
-    return user?.traits;
+
+    return userTraits.map((ut) => ut.trait);
   }
 
   findAll(query: FindUsersDto) {
@@ -190,7 +187,8 @@ export class UsersService {
         'friends.id',
         'friends.respect',
         'traits.id',
-        'traits.name',
+        'trait.id',
+        'trait.name',
         'kingdoms.id',
         'user.id',
         'user.refId',
@@ -203,6 +201,7 @@ export class UsersService {
       ])
       .leftJoin('users.friends', 'friends')
       .leftJoin('users.traits', 'traits')
+      .leftJoin('traits.trait', 'trait')
       .leftJoin('users.kingdoms', 'kingdoms')
       .leftJoin('kingdoms.kingdom', 'kingdom')
       .leftJoin('friends.user', 'user')
