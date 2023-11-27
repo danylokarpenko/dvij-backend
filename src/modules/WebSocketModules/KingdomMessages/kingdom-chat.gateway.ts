@@ -5,10 +5,10 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'ws';
+import { UseGuards } from '@nestjs/common';
 import { KingdomChatService } from './kingdom-chat.service';
 import { KingdomMessagesService } from 'src/modules/kingdomMessages/kingdomMessages.service';
 import { CreateKingdomMessageDto } from 'src/modules/kingdomMessages/dto/create-kingdomMessage.dto';
-import { UseGuards } from '@nestjs/common';
 import { WsJwtGuard } from 'src/modules/auth/guards/ws-auth.guard';
 import { UserEntity } from 'src/modules/users/user.entity';
 

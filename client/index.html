@@ -2,8 +2,8 @@
   <head>
     <script>
       const socket = new WebSocket(
-        'ws://mothership.friendsgamesincubator.com:3030',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsInVzZXJuYW1lIjoic3RyaW5nIiwiZmlyc3ROYW1lIjpudWxsLCJsYXN0TmFtZSI6bnVsbCwiaWF0IjoxNjk0OTY1NDI2LCJleHAiOjE2OTQ5OTc4MjZ9.jZwD7Gu40qITreVTPZJmvyahwTw7HjOOyog6Fxn6aVY',
+        'ws://mothership.friendsgamesincubator.com:3000',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoic3RyaW5nIiwiZmlyc3ROYW1lIjoic3RyaW5nIiwibGFzdE5hbWUiOm51bGwsImlhdCI6MTY5NTIwMTk1MCwiZXhwIjoxNjk1MjM0MzUwfQ.1jrEO_FWjUeJcjwwTDGuX5cMFHD3u2kT0jOMs5UXdNI',
       );
 
       socket.onopen = function () {
@@ -13,11 +13,11 @@
             event: 'send_message',
             data: {
               auth_token:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsInVzZXJuYW1lIjoic3RyaW5nIiwiZmlyc3ROYW1lIjpudWxsLCJsYXN0TmFtZSI6bnVsbCwiaWF0IjoxNjk0OTY1NDI2LCJleHAiOjE2OTQ5OTc4MjZ9.jZwD7Gu40qITreVTPZJmvyahwTw7HjOOyog6Fxn6aVY',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoic3RyaW5nIiwiZmlyc3ROYW1lIjoic3RyaW5nIiwibGFzdE5hbWUiOm51bGwsImlhdCI6MTY5NTIwMTk1MCwiZXhwIjoxNjk1MjM0MzUwfQ.1jrEO_FWjUeJcjwwTDGuX5cMFHD3u2kT0jOMs5UXdNI',
               kingdomMessage: {
                 text: 'qwe',
-                userId: 1,
-                kingdomId: 10,
+                userId: 4,
+                kingdomId: 1,
               },
             },
           }),
@@ -30,6 +30,10 @@
       socket.onerror && socket.onerror(console.log);
     </script>
   </head>
-
+  <img
+    alt="HTML tutorial"
+    style="width: 420px; height: 520px; border: 0"
+    src="http://mothership.friendsgamesincubator.com:3030/users/get-file?name=user_2_1695301513492.jpeg"
+  />
   <body></body>
 </html>
