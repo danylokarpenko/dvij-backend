@@ -43,6 +43,9 @@ export class CreateUserDto {
   @IsDecimal()
   nextPayRateIncrease?: number;
 
+  @IsString()
+  password: string;
+
   // If you are going to include createdAt and updatedAt in DTO,
   // they should be optional as they are usually managed by the database.
   @IsOptional()

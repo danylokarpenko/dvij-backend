@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
-import { HitEntity } from '../hits/hits.entity';
+import { HitEntity } from '../hits/hit.entity';
 
 @Entity('userHits')
 export class UserHitsEntity extends BaseEntity {

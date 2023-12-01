@@ -3,7 +3,7 @@ import { HitIncomesService } from './hitIncomes.service';
 import { HitIncomesController } from './hitIncomes.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HitIncomeEntity } from './hitIncomes.entity';
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '../users/user.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([HitIncomeEntity]), UsersModule],

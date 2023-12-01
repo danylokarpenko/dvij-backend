@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/user.service';
 import { SignupDto } from './dto/signup.dto';
 
 @Injectable()

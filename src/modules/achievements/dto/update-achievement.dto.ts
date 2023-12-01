@@ -9,7 +9,7 @@ export class UpdateAchievementDto {
 
   @IsOptional()
   @IsString()
-  label?: string;
+  name?: string;
 
   @IsOptional()
   @IsString()

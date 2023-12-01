@@ -9,8 +9,8 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from '../users/user.entity';
-import { HitEntity } from '../hits/hits.entity';
-import { GameEntity } from '../games/games.entity';
+import { HitEntity } from '../hits/hit.entity';
+import { GameEntity } from '../games/game.entity';
 
 @Entity()
 export class IterationEntity extends BaseEntity {

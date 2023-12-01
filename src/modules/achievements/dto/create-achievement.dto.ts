@@ -7,7 +7,7 @@ export class CreateAchievementDto {
   key: string;
 
   @IsString()
-  label: string;
+  name: string;
 
   @IsString()
   description: string;

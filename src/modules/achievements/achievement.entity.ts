@@ -18,7 +18,7 @@ export class AchievementEntity extends BaseEntity {
   key: string;
 
   @Column({ type: 'varchar' })
-  label: string;
+  name: string;
 
   @Column({ type: 'text' })
   description: string;

@@ -3,7 +3,7 @@ import { TalentsService } from './talents.service';
 import { TalentsController } from './talents.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TalentEntity } from './talents.entity';
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '../users/user.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TalentEntity]), UsersModule],
