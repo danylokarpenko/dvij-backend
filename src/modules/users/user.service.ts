@@ -28,6 +28,7 @@ export class UserService {
       jobTitle,
       birthDayDate,
       email,
+      sort = 'createdAt:DESC',
     } = query;
 
     const whereCondition = [];
@@ -37,6 +38,10 @@ export class UserService {
     if (jobTitle) whereCondition.push({ jobTitle: Like(`%${jobTitle}%`) });
     if (birthDayDate) whereCondition.push({ birthDayDate });
     if (email) whereCondition.push({ email: Like(`%${email}%`) });
+    // Sorting
+    const order = {};
+    const [sortField, sortDirection] = (sort || 'createdAt:DESC').split(':');
+    order[sortField] = sortDirection.toUpperCase();
 
     const [results, total] = await this.userRepository.findAndCount({
       where: whereCondition,

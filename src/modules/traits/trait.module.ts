@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TraitsService } from './traits.service';
-import { TraitsController } from './traits.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TraitEntity } from './trait.entity';
+import { TraitService } from './trait.service';
+import { TraitController } from './trait.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([TraitEntity])],
-  controllers: [TraitsController],
-  providers: [TraitsService],
+  controllers: [TraitController],
+  providers: [TraitService],
 })
 export class TraitsModule {}

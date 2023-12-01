@@ -34,4 +34,8 @@ export class FindAllUsersQuery {
   @IsOptional()
   @IsString()
   email?: string;
+
+  @IsOptional()
+  @IsString()
+  sort?: string;
 }

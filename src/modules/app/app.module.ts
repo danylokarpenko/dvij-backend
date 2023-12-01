@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '../users/user.module';
-import { TraitsModule } from '../traits/traits.module';
+import { TraitsModule } from '../traits/trait.module';
 import { EventsModule } from '../events/events.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AchievementsModule } from '../achievements/achievement.module';

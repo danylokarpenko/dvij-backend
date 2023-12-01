@@ -9,10 +9,10 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { UserHitsEntity } from '../userHits/userHits.entity';
+import { UserHitsEntity } from '../userHits/userHit.entity';
 import { AchievementEntity } from '../achievements/achievement.entity';
-import { IterationEntity } from '../iterations/iterations.entity';
-import { HitIncomeEntity } from '../hitIncomes/hitIncomes.entity';
+import { IterationEntity } from '../iterations/iteration.entity';
+import { HitIncomeEntity } from '../hitIncomes/hitIncome.entity';
 
 @Entity('hits')
 export class HitEntity extends BaseEntity {

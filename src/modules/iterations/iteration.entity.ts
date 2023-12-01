@@ -12,7 +12,7 @@ import { UserEntity } from '../users/user.entity';
 import { HitEntity } from '../hits/hit.entity';
 import { GameEntity } from '../games/game.entity';
 
-@Entity()
+@Entity('iterations')
 export class IterationEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

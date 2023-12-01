@@ -12,7 +12,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { AchievementEntity } from '../achievements/achievement.entity';
-import { IterationEntity } from '../iterations/iterations.entity';
+import { IterationEntity } from '../iterations/iteration.entity';
 
 @Entity('games')
 export class GameEntity extends BaseEntity {
