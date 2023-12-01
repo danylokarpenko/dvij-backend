@@ -1,34 +1,55 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { CreateUserDto } from './create-user.dto';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsDate,
+  IsDecimal,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { UserRoleEnum } from 'src/infrastructure/enums/UserRoleEnum.enum';
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @ApiProperty()
-  firstName: string;
+export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  firstName?: string;
 
-  @ApiProperty()
-  lastName: string;
+  @IsOptional()
+  @IsString()
+  lastName?: string;
 
-  @ApiProperty()
-  username: string;
+  @IsOptional()
+  @IsString()
+  avatarUrl?: string;
 
-  @ApiProperty()
-  email: string;
+  @IsOptional()
+  @IsEnum(UserRoleEnum)
+  role?: UserRoleEnum;
 
-  @ApiProperty()
-  avatarUrl: string;
+  @IsOptional()
+  @IsString()
+  jobTitle?: string;
 
-  @ApiProperty()
-  rating: number;
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  birthDayDate?: Date;
 
-  @ApiProperty()
-  restrictionLvl: number;
+  @IsOptional()
+  @IsString()
+  contacts?: string;
 
-  @ApiProperty()
-  registered: boolean;
+  @IsOptional()
+  @IsDecimal()
+  payRate?: number;
 
-  @ApiProperty()
-  lat: number;
+  @IsOptional()
+  @IsDecimal()
+  nextPayRateIncrease?: number;
 
-  @ApiProperty()
-  lng: number;
+  // Usually, we don't include ID in the DTO for updating, as it's typically passed in the URL or some other way.
+  // Similarly, createdAt is not included because it should not change after creation.
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  updatedAt?: Date;
 }

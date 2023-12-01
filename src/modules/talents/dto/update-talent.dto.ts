@@ -1,8 +1,6 @@
-// update-achievement.dto.ts
-
 import { IsString, IsOptional } from 'class-validator';
 
-export class UpdateAchievementDto {
+export class UpdateTalentDto {
   @IsOptional()
   @IsString()
   key?: string;
@@ -10,10 +8,6 @@ export class UpdateAchievementDto {
   @IsOptional()
   @IsString()
   label?: string;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
 
   @IsOptional()
   @IsString()

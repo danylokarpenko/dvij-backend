@@ -1,27 +1,33 @@
+// trait.entity.ts
+
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
+  BaseEntity,
   ManyToMany,
-  JoinTable,
-  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
-import { ParentEntity } from 'src/infrastructure/type/parent.entity';
-import { KingdomEntity } from '../kingdoms/kingdom.entity';
 
 @Entity('traits')
-export class TraitEntity extends ParentEntity {
+export class TraitEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.traits)
-  users: UserEntity[];
+  @Column({ type: 'varchar' })
+  iconUrl: string;
 
-  @OneToMany(() => KingdomEntity, (kingdom) => kingdom.trait)
-  kingdom: KingdomEntity[];
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @ManyToMany(() => UserEntity, (user) => user.traits)
+  users: UserEntity[];
 }

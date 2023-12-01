@@ -1,16 +1,14 @@
-// achievement.entity.ts
-
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  BaseEntity,
 } from 'typeorm';
 
-@Entity('achievements')
-export class AchievementEntity extends BaseEntity {
+@Entity()
+export class TalentEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,9 +17,6 @@ export class AchievementEntity extends BaseEntity {
 
   @Column({ type: 'varchar' })
   label: string;
-
-  @Column({ type: 'text' })
-  description: string;
 
   @Column({ type: 'varchar', nullable: true })
   iconUrl: string;

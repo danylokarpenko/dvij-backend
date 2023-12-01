@@ -3,97 +3,88 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToMany,
-  JoinTable,
-  JoinColumn,
-  OneToOne,
   OneToMany,
+  JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BaseEntity,
 } from 'typeorm';
-import { TraitEntity } from '../traits/trait.entity';
-import { ParentEntity } from 'src/infrastructure/type/parent.entity';
-import { EventEntity } from '../events/event.entity';
-import { AchievementEntity } from '../achievements/achievement.entity';
-import { UserFriendsEntity } from '../userFriends/userFriends.entity';
-import { UserKingdomsEntity } from '../userKingdoms/userKingdom.entity';
-import { KingdomMessageEntity } from '../kingdomMessages/kingdomMessage.entity';
-import { UserTraitsEntity } from '../userTraits/userTraits.entity';
 
-@Entity('users')
-export class UserEntity extends ParentEntity {
+import { UserRoleEnum } from 'src/infrastructure/enums/UserRoleEnum.enum';
+import { IterationEntity } from '../iterations/iterations.entity';
+import { TalentEntity } from '../talents/talents.entity';
+
+import { AchievementEntity } from '../achievements/achievement.entity';
+import { UserHitsEntity } from '../userHits/userHits.entity';
+import { UserPayRateEntity } from '../userPayRates/userPayRates.entity';
+import { TraitEntity } from '../traits/trait.entity';
+
+@Entity()
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar' })
   firstName: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar' })
   lastName: string;
 
-  @Column({ nullable: false })
-  username: string;
+  @Column({ type: 'varchar', nullable: true })
+  avatarUrl: string;
 
-  @Column({ nullable: true })
-  email: string;
+  @Column({
+    type: 'enum',
+    enum: UserRoleEnum,
+  })
+  role: UserRoleEnum;
 
-  @Column({ nullable: true })
-  phone: string;
+  @Column({ type: 'varchar', nullable: true })
+  jobTitle: string;
 
-  @Column({ type: 'numeric', nullable: true })
-  lat: number;
+  @Column({ type: 'date', nullable: true })
+  birthDayDate: Date;
 
-  @Column({ type: 'numeric', nullable: true })
-  lng: number;
+  @Column({ type: 'varchar', nullable: true })
+  contacts: string;
+
+  @Column({ type: 'decimal' })
+  payRate: number;
+
+  @Column({ type: 'decimal', nullable: true })
+  nextPayRateIncrease: number;
 
   @Column({ nullable: false, select: false })
   passwordHash: string;
 
-  @Column({ nullable: true })
-  avatarUrl: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column({ nullable: true })
-  aiAvatarUrl: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-  @Column({ type: 'numeric', nullable: true })
-  rating: number;
+  @ManyToMany(() => TalentEntity)
+  @JoinTable()
+  talents: TalentEntity[];
 
-  @Column({ type: 'int', default: 0 })
-  restrictionLvl: number;
+  @OneToMany(() => IterationEntity, (iteration) => iteration.creator)
+  iterations: IterationEntity[];
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn()
-  ref: UserEntity;
-  @Column({ unique: false, nullable: true })
-  refId: number;
-
-  @Column({ default: false })
-  registered: boolean;
-
-  @OneToMany(() => UserTraitsEntity, (userTrait) => userTrait.user)
-  public traits: UserTraitsEntity[];
-
-  @ManyToMany(() => AchievementEntity, (achievement) => achievement.users, {
-    cascade: true,
-  })
-  @JoinTable({
-    name: 'userAchievements',
-    joinColumns: [{ name: 'userId', referencedColumnName: 'id' }],
-    inverseJoinColumns: [{ name: 'achievementId', referencedColumnName: 'id' }],
-  })
+  @ManyToMany(() => AchievementEntity)
+  @JoinTable()
   achievements: AchievementEntity[];
 
-  @OneToMany(() => UserKingdomsEntity, (userToKingdom) => userToKingdom.user)
-  kingdoms: UserKingdomsEntity[];
+  @OneToMany(() => UserHitsEntity, (userHits) => userHits.user)
+  userHits: UserHitsEntity[];
 
-  @ManyToMany(() => EventEntity, (event) => event.users)
+  @OneToMany(() => UserPayRateEntity, (payRate) => payRate.user)
+  payRates: UserPayRateEntity[];
+
+  @ManyToMany(() => TraitEntity, (trait) => trait.users)
   @JoinTable({
-    name: 'userEvents',
-    joinColumns: [{ name: 'userId' }],
-    inverseJoinColumns: [{ name: 'eventId' }],
+    name: 'userTraits',
+    joinColumn: { name: 'userId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'traitId', referencedColumnName: 'id' },
   })
-  events: EventEntity[];
-
-  @OneToMany(() => UserFriendsEntity, (userFriend) => userFriend.friend)
-  public friends: UserFriendsEntity[];
-
-  @OneToMany(() => KingdomMessageEntity, (message) => message.user)
-  public messages: KingdomMessageEntity[];
+  traits: TraitEntity[];
 }
