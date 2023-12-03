@@ -1,5 +1,5 @@
 // user.service.ts
-
+import bcryptjs from 'bcryptjs';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
@@ -66,8 +66,19 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
+  async findByEmailWithPassword(email: string): Promise<UserEntity | null> {
+    const entity = await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'role', 'email', 'firstName', 'lastName', 'passwordHash'],
+    });
+    return entity;
+  }
+
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = this.userRepository.create(createUserDto);
+    const { password, ...rest } = createUserDto;
+    const saltOrRounds = 10;
+    const passwordHash = await bcryptjs.hash(password, saltOrRounds);
+    const user = this.userRepository.create({ ...rest, passwordHash });
     return this.userRepository.save(user);
   }
 
@@ -78,5 +89,52 @@ export class UserService {
 
   async remove(id: number): Promise<void> {
     await this.userRepository.delete(id);
+  }
+
+  async updateUserRefreshToken(
+    userId: number,
+    refreshToken: string,
+  ): Promise<void> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (user) {
+      user.refreshToken = refreshToken;
+      await this.userRepository.save(user);
+    }
+  }
+
+  async invalidateRefreshToken(userId: number): Promise<void> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (user) {
+      user.refreshToken = null;
+      await this.userRepository.save(user);
+    }
+  }
+
+  async changePassword(
+    userId: number,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const isOldPasswordValid = await bcryptjs.compare(
+      oldPassword,
+      user.passwordHash,
+    );
+    if (!isOldPasswordValid) {
+      throw new Error('Old password is incorrect');
+    }
+
+    const saltOrRounds = 10;
+    const newPasswordHash = await bcryptjs.hash(newPassword, saltOrRounds);
+
+    user.passwordHash = newPasswordHash;
+    await this.userRepository.save(user);
+
+    await this.invalidateRefreshToken(userId);
   }
 }

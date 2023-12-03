@@ -2,11 +2,24 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import AppDataSource from '../app-data-source';
 import { AppModule } from './modules/app/app.module';
-import { WsAdapter } from './modules/WebSocketModules/adapters/ws-adapter';
+import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './infrastructure/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useWebSocketAdapter(new WsAdapter(app));
+
+  app.setGlobalPrefix('api');
+
+  app.enableCors();
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   AppDataSource.initialize()
     .then(() => {
@@ -15,6 +28,7 @@ async function bootstrap() {
     .catch((err) => {
       console.error('Error during Data Source initialization', err);
     });
+
   // Create a Swagger document options object
   const options = new DocumentBuilder()
     .setTitle('DVIJ API endpoints')
@@ -39,7 +53,9 @@ async function bootstrap() {
 
   // Serve the Swagger document at /api
   SwaggerModule.setup('api', app, document);
-  const port = 3030;
+
+  const port = process.env.PORT || 3030;
+
   await app.listen(port);
 }
 bootstrap();

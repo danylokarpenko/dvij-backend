@@ -15,7 +15,7 @@ import { IterationEntity } from '../iterations/iteration.entity';
 import { TalentEntity } from '../talents/talent.entity';
 
 import { AchievementEntity } from '../achievements/achievement.entity';
-import { UserHitsEntity } from '../userHits/userHit.entity';
+import { UserHitsEntity } from '../userHits/userHits.entity';
 import { UserPayRateEntity } from '../userPayRates/userPayRate.entity';
 import { TraitEntity } from '../traits/trait.entity';
 
@@ -59,6 +59,9 @@ export class UserEntity extends BaseEntity {
 
   @Column({ nullable: false, select: false })
   passwordHash: string;
+
+  @Column({ nullable: true })
+  refreshToken: string;
 
   @CreateDateColumn()
   createdAt: Date;

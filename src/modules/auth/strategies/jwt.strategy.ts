@@ -19,17 +19,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,
     });
-    // this._usersRepository = this.connection.getCustomRepository(UserEntity);
   }
 
   async validate(payload: any) {
-    const { sub, username, roleId } = payload;
-    // if (roleId === UserRole.Trader) {
-    //   return payload;
-    // }
-    const { passwordHash, ...user } = await this._usersRepository.findOneBy({
-      username,
+    const { sub, email } = payload;
+    const user = await this._usersRepository.findOneBy({
+      email,
     });
+
+    delete user.passwordHash;
+
     return { id: sub, ...user };
   }
 }

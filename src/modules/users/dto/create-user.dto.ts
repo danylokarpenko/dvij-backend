@@ -4,12 +4,20 @@ import {
   IsString,
   IsDate,
   IsDecimal,
+  IsNotEmpty,
+  IsEmail,
+  MinLength,
 } from 'class-validator';
 
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { UserRoleEnum } from 'src/infrastructure/enums/UserRoleEnum.enum';
 
 export class CreateUserDto {
+  @IsNotEmpty()
+  @IsEmail()
+  @Transform(({ value }) => value.toLowerCase())
+  email: string;
+
   @IsString()
   firstName: string;
 
@@ -44,6 +52,8 @@ export class CreateUserDto {
   nextPayRateIncrease?: number;
 
   @IsString()
+  @IsNotEmpty()
+  @MinLength(8)
   password: string;
 
   // If you are going to include createdAt and updatedAt in DTO,

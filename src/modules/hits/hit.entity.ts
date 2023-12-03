@@ -9,7 +9,7 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { UserHitsEntity } from '../userHits/userHit.entity';
+import { UserHitsEntity } from '../userHits/userHits.entity';
 import { AchievementEntity } from '../achievements/achievement.entity';
 import { IterationEntity } from '../iterations/iteration.entity';
 import { HitIncomeEntity } from '../hitIncomes/hitIncome.entity';

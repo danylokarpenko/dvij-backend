@@ -3,27 +3,27 @@ import { AuthController } from './auth.controller';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { UsersModule } from '../users/user.module';
 
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UserEntity } from '../users/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from '../users/user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
-    UsersModule,
+    UserModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async () => {
-        const secret = process.env.JWT_SECRET;
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.get('JWT_SECRET');
         return {
           secret,
           signOptions: {
-            expiresIn: '9h',
+            expiresIn: '4h',
           },
         };
       },

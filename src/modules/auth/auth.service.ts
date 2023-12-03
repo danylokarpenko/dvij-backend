@@ -1,75 +1,113 @@
-// eslint-disable-next-line
-const bcrypt = require('bcryptjs');
-import { Injectable, NotFoundException } from '@nestjs/common';
+import bcrypt from 'bcryptjs';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { UsersService } from '../users/user.service';
-import { SignupDto } from './dto/signup.dto';
+import { UserService } from '../users/user.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findByUsernameWithPassword(username);
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.userService.findByEmailWithPassword(email);
     if (!user) {
-      throw new NotFoundException('INVALID_USERNAME_OR_PASSWORD');
+      throw new HttpException(
+        'Authentication failed. Please check your credentials.',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
     const match = await bcrypt.compare(pass, user.passwordHash);
     if (user && match) {
-      // eslint-disable-next-line
-      const { passwordHash, ...result } = user;
-      return result;
+      delete user.passwordHash;
+      return user;
     }
-    return null;
+    throw new HttpException(
+      'Authentication failed. Please check your credentials.',
+      HttpStatus.UNAUTHORIZED,
+    );
   }
 
-  async login(req: any) {
-    const { id, username, firstName, lastName } = req.user;
-    const payload = { sub: id, username, firstName, lastName };
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: req.user,
-    };
+  async login(user: LoginDto) {
+    const accessToken = this.generateAccessToken(user);
+    const refreshToken = await this.generateRefreshToken(user);
+    return { accessToken, refreshToken, user };
   }
 
-  async signUp(userPayload: SignupDto) {
-    const saltOrRounds = 10;
-    const { password, ...userData } = userPayload;
-    const passwordHash = await bcrypt.hash(password, saltOrRounds);
-    const user = await this.usersService.register({
-      ...userData,
-      passwordHash,
-    });
+  async refreshAccessToken(
+    refreshToken: string,
+  ): Promise<{ accessToken: string }> {
+    const userId = this.getUserIdFromRefreshToken(refreshToken);
+    if (!userId) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
 
-    return {
-      access_token: this.jwtService.sign(userPayload),
-      user,
-    };
+    const user = await this.userService.findOne(userId);
+    if (!user || user.refreshToken !== refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const newAccessToken = this.generateAccessToken(user);
+
+    return { accessToken: newAccessToken };
   }
 
-  async generateToken(payload: any, expiresTime = '5h') {
+  private generateAccessToken(user: any) {
+    const payload = { sub: user.id, email: user.email };
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: expiresTime,
+      expiresIn: '1h',
     });
   }
 
-  async decodeToken(accessToken: string) {
-    const decodedToken = await this.jwtService.decode(accessToken);
-    return decodedToken;
+  async generateRefreshToken(user: any): Promise<string> {
+    const payload = { sub: user.id };
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: '7d',
+    });
+
+    await this.saveRefreshToken(user.id, refreshToken);
+
+    return refreshToken;
   }
 
-  async verifyToken(accessToken: string): Promise<boolean> {
+  private getUserIdFromRefreshToken(refreshToken: string): number | null {
     try {
-      await this.jwtService.verify(accessToken);
-      return true;
+      const decoded = this.jwtService.verify(refreshToken, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+      return decoded.sub;
     } catch (e) {
-      return false;
+      return null;
     }
+  }
+
+  private async saveRefreshToken(
+    userId: number,
+    refreshToken: string,
+  ): Promise<void> {
+    await this.userService.updateUserRefreshToken(userId, refreshToken);
+  }
+
+  async signUp(userPayload: CreateUserDto) {
+    const user = await this.userService.create(userPayload);
+    const accessToken = this.generateAccessToken(user);
+    const refreshToken = await this.generateRefreshToken(user);
+    return { accessToken, refreshToken, user };
+  }
+
+  async logout(userId: number): Promise<void> {
+    await this.userService.invalidateRefreshToken(userId);
   }
 
   public async getUserFromAuthenticationToken(token: string) {
@@ -80,7 +118,7 @@ export class AuthService {
     const userId = payload.sub;
 
     if (userId) {
-      return this.usersService.findOne(userId);
+      return this.userService.findOne(userId);
     }
   }
 }
