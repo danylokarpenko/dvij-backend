@@ -9,12 +9,17 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { HitService } from './hit.service';
 import { CreateHitDto } from './dto/create-hit.dto';
 import { UpdateHitDto } from './dto/update-hit.dto';
 import { FindAllHitsQueryDto } from './dto/find-all-hits-query.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('hits')
 export class HitController {
   constructor(private readonly hitService: HitService) {}

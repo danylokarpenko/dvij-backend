@@ -1,12 +1,15 @@
-// update-hit-income.dto.ts
-
-import { IsDecimal, IsDate, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjsx/crud/lib/crud';
+import { Transform } from 'class-transformer';
+import { IsNumber, IsDate, IsOptional } from 'class-validator';
 
 export class UpdateHitIncomeDto {
+  @ApiProperty({ required: false })
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
   amount?: number;
 
+  @ApiProperty()
+  @Transform(({ value }) => new Date(value))
   @IsOptional()
   @IsDate()
   month?: Date;

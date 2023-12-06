@@ -23,7 +23,7 @@ import { UserModule } from '../users/user.module';
         return {
           secret,
           signOptions: {
-            expiresIn: '4h',
+            expiresIn: '8h',
           },
         };
       },

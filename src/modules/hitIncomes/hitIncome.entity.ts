@@ -18,6 +18,8 @@ export class HitIncomeEntity extends BaseEntity {
 
   @ManyToOne(() => HitEntity, (hit) => hit.hitIncomes)
   hit: HitEntity;
+  @Column()
+  hitId: number;
 
   @Column({ type: 'decimal' })
   amount: number;

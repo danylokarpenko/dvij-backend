@@ -1,14 +1,18 @@
 // create-user-hits.dto.ts
 
-import { IsInt, IsDecimal } from 'class-validator';
+import { ApiProperty } from '@nestjsx/crud/lib/crud';
+import { IsInt, IsNumber } from 'class-validator';
 
 export class CreateUserHitsDto {
+  @ApiProperty()
   @IsInt()
   userId: number;
 
+  @ApiProperty()
   @IsInt()
   hitId: number;
 
-  @IsDecimal()
+  @ApiProperty()
+  @IsNumber()
   bonusPercentage: number;
 }

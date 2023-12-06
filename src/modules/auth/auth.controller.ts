@@ -1,6 +1,5 @@
-import { Controller, UseGuards, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
 
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -17,7 +16,6 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Login' })
   @ApiResponse({ status: 200, description: 'Login to account' })
-  @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Body() user: LoginDto) {
     return this.authService.login(user);

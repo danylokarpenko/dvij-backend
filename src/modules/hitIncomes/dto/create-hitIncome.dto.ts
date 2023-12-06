@@ -1,11 +1,20 @@
 // create-hit-income.dto.ts
 
-import { IsDecimal, IsDate } from 'class-validator';
+import { ApiProperty } from '@nestjsx/crud/lib/crud';
+import { Transform } from 'class-transformer';
+import { IsNumber, IsDate } from 'class-validator';
 
 export class CreateHitIncomeDto {
-  @IsDecimal()
+  @ApiProperty()
+  @IsNumber()
+  hitId: number;
+
+  @ApiProperty()
+  @IsNumber()
   amount: number;
 
+  @ApiProperty()
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   month: Date;
 }

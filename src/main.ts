@@ -8,7 +8,7 @@ import { HttpExceptionFilter } from './infrastructure/filters/http-exception.fil
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api/v1');
 
   app.enableCors();
 
@@ -21,30 +21,20 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  AppDataSource.initialize()
-    .then(() => {
-      console.log('Data Source has been initialized!');
-    })
-    .catch((err) => {
-      console.error('Error during Data Source initialization', err);
-    });
-
   // Create a Swagger document options object
   const options = new DocumentBuilder()
     .setTitle('DVIJ API endpoints')
     .setDescription('API')
     .setVersion('1.0')
-    .addTag('xD')
+    .addTag('Dvij routes')
     .addBearerAuth(
       {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'Enter JWT token',
         in: 'header',
       },
-      'JWT-auth',
+      'JWT-auth', // This is the name of the security scheme
     )
     .build();
 
@@ -55,7 +45,14 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const port = process.env.PORT || 3030;
-
+  AppDataSource.initialize()
+    .then(() => {
+      console.log('Data Source has been initialized!');
+    })
+    .catch((err) => {
+      console.error('Error during Data Source initialization', err);
+    });
   await app.listen(port);
 }
+
 bootstrap();

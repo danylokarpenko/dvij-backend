@@ -19,6 +19,8 @@ export class IterationEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.iterations)
   creator: UserEntity;
+  @Column()
+  creatorId: number;
 
   @Column({ type: 'text' })
   description: string;
@@ -31,9 +33,13 @@ export class IterationEntity extends BaseEntity {
 
   @ManyToOne(() => HitEntity, (hit) => hit.iterations)
   hit: HitEntity;
+  @Column()
+  hitId: number;
 
   @ManyToOne(() => GameEntity, (game) => game.iterations)
   game: GameEntity;
+  @Column()
+  gameId: number;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -7,12 +7,17 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UserHitsService } from './user-hits.service';
 import { CreateUserHitsDto } from './dto/create-userHit.dto';
 import { UpdateUserHitsDto } from './dto/update-userHit.dto';
 import { FindAllUserHitsQueryDto } from './dto/find-all-user-hits-query.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('user-hits')
 export class UserHitsController {
   constructor(private readonly userHitsService: UserHitsService) {}

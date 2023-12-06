@@ -9,12 +9,17 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { IterationService } from './iteration.service';
 import { CreateIterationDto } from './dto/create-iteration.dto';
 import { UpdateIterationDto } from './dto/update-iteration.dto';
 import { FindAllIterationsQueryDto } from './dto/find-all-iterations-query.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('iterations')
 export class IterationController {
   constructor(private readonly iterationService: IterationService) {}

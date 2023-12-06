@@ -11,11 +11,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   private _usersRepository: Repository<UserEntity>;
 
   constructor(private readonly connection: Connection) {
+    const token = ExtractJwt.fromAuthHeaderAsBearerToken();
+    console.log('token', token);
+
     super({
-      usernameField: 'username',
+      usernameField: 'email',
       passwordField: 'password',
 
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: token,
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,
     });

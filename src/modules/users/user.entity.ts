@@ -19,12 +19,12 @@ import { UserHitsEntity } from '../userHits/userHits.entity';
 import { UserPayRateEntity } from '../userPayRates/userPayRate.entity';
 import { TraitEntity } from '../traits/trait.entity';
 
-@Entity()
+@Entity('users')
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: false })
   email: string;
 
   @Column({ type: 'varchar' })
@@ -60,7 +60,7 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: false, select: false })
   passwordHash: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   refreshToken: string;
 
   @CreateDateColumn()

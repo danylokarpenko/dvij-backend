@@ -9,12 +9,17 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { FindAllHitIncomesQueryDto } from './dto/find-all-hit-incomes-query.dto';
 import { HitIncomeService } from './hitIncome.service';
 import { CreateHitIncomeDto } from './dto/create-hitIncome.dto';
 import { UpdateHitIncomeDto } from './dto/update-hitIncome.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('hit-incomes')
 export class HitIncomeController {
   constructor(private readonly hitIncomeService: HitIncomeService) {}

@@ -7,12 +7,17 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { FindAllUserPayRatesQueryDto } from './dto/find-all-user-pay-rates-query.dto';
 import { UserPayRatesService } from './userPayRate.service';
 import { CreateUserPayRateDto } from './dto/create-userPayRate.dto';
 import { UpdateUserPayRateDto } from './dto/update-userPayRate.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('JWT-auth')
+@UseGuards(JwtAuthGuard)
 @Controller('user-pay-rates')
 export class UserPayRatesController {
   constructor(private readonly userPayRatesService: UserPayRatesService) {}

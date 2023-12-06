@@ -1,5 +1,6 @@
 // user.service.ts
-import bcryptjs from 'bcryptjs';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcryptjs = require('bcryptjs');
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
@@ -66,6 +67,10 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
+  async findOneBy(where): Promise<UserEntity | null> {
+    return this.userRepository.findOne({ where: where });
+  }
+
   async findByEmailWithPassword(email: string): Promise<UserEntity | null> {
     const entity = await this.userRepository.findOne({
       where: { email },
@@ -79,7 +84,9 @@ export class UserService {
     const saltOrRounds = 10;
     const passwordHash = await bcryptjs.hash(password, saltOrRounds);
     const user = this.userRepository.create({ ...rest, passwordHash });
-    return this.userRepository.save(user);
+    const res = await this.userRepository.save(user);
+    delete res.passwordHash;
+    return res;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {

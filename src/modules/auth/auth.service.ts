@@ -1,4 +1,6 @@
-import bcrypt from 'bcryptjs';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcryptjs = require('bcryptjs');
+
 import {
   HttpException,
   HttpStatus,
@@ -26,7 +28,7 @@ export class AuthService {
         HttpStatus.UNAUTHORIZED,
       );
     }
-    const match = await bcrypt.compare(pass, user.passwordHash);
+    const match = await bcryptjs.compare(pass, user.passwordHash);
     if (user && match) {
       delete user.passwordHash;
       return user;
@@ -37,9 +39,10 @@ export class AuthService {
     );
   }
 
-  async login(user: LoginDto) {
-    const accessToken = this.generateAccessToken(user);
-    const refreshToken = await this.generateRefreshToken(user);
+  async login(userPayload: LoginDto) {
+    const accessToken = this.generateAccessToken(userPayload);
+    const refreshToken = await this.generateRefreshToken(userPayload);
+    const user = await this.userService.findOneBy({ email: userPayload.email });
     return { accessToken, refreshToken, user };
   }
 
@@ -65,7 +68,7 @@ export class AuthService {
     const payload = { sub: user.id, email: user.email };
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '1h',
+      expiresIn: '8h',
     });
   }
 

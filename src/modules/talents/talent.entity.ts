@@ -7,7 +7,7 @@ import {
   BaseEntity,
 } from 'typeorm';
 
-@Entity()
+@Entity('talents')
 export class TalentEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
