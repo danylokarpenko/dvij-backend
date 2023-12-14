@@ -11,13 +11,13 @@ import { TraitsModule } from '../traits/trait.module';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../users/user.module';
 import { AchievementModule } from '../achievements/achievement.module';
-import { HitModule } from '../hits/hit.module';
+
 import { GameModule } from '../games/game.module';
-import { HitIncomesModule } from '../hitIncomes/hitIncome.module';
 import { IterationModule } from '../iterations/iteration.module';
 import { TalentsModule } from '../talents/talent.module';
 import { UserPayRateModule } from '../userPayRates/userPayRate.module';
-import { UserHitsModule } from '../userHits/userHits.module';
+import { GameUserModule } from '../gameUsers/gameUsers.module';
+import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
 
 @Module({
   imports: [
@@ -44,15 +44,14 @@ import { UserHitsModule } from '../userHits/userHits.module';
     TraitsModule,
     AchievementModule,
     AuthModule,
-    HitModule,
     GameModule,
-    HitIncomesModule,
     IterationModule,
     IterationModule,
     TalentsModule,
     TraitsModule,
     UserPayRateModule,
-    UserHitsModule,
+    GameUserModule,
+    GameStatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

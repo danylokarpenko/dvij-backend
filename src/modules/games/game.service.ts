@@ -7,7 +7,7 @@ import { GameEntity } from './game.entity';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { FindAllGamesQueryDto } from './dto/find-all-games-query.dto';
-import { MetaI } from 'src/infrastructure/interfaces/Meta.interface';
+import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
 
 @Injectable()
 export class GameService {
@@ -32,24 +32,26 @@ export class GameService {
       lastPatchDate,
       cpi,
       pt,
-      retD1,
-      retD7,
+      d1,
+      d7,
       dau,
       installs,
       malesGenderPercentage,
       minAge,
       maxAge,
       sort,
+      isHit,
     } = query;
 
     const whereCondition = [];
     if (name) whereCondition.push({ name: Like(`%${name}%`) });
+    if (query.hasOwnProperty('isHit')) whereCondition.push({ isHit });
     if (releaseDate) whereCondition.push({ releaseDate });
     if (lastPatchDate) whereCondition.push({ lastPatchDate });
     if (cpi !== undefined) whereCondition.push({ cpi });
     if (pt !== undefined) whereCondition.push({ pt });
-    if (retD1 !== undefined) whereCondition.push({ retD1 });
-    if (retD7 !== undefined) whereCondition.push({ retD7 });
+    if (d1 !== undefined) whereCondition.push({ d1 });
+    if (d7 !== undefined) whereCondition.push({ d7 });
     if (dau !== undefined) whereCondition.push({ dau });
     if (installs !== undefined) whereCondition.push({ installs });
     if (malesGenderPercentage !== undefined)
@@ -69,6 +71,7 @@ export class GameService {
       order,
       take: limit,
       skip: (page - 1) * limit,
+      relations: ['gameUsers', 'gameUsers.user'],
     });
 
     const totalPages = Math.ceil(total / limit);
@@ -76,12 +79,21 @@ export class GameService {
   }
 
   async findOne(id: number): Promise<GameEntity> {
-    return this.gameRepository.findOneBy({ id });
+    return this.gameRepository.findOne({
+      where: { id },
+      relations: [
+        'gameUsers',
+        'gameUsers.user',
+        'gameStatistics',
+        'iterations',
+        'iterations.creator',
+      ],
+    });
   }
 
   async update(id: number, updateGameDto: UpdateGameDto): Promise<GameEntity> {
     await this.gameRepository.update(id, updateGameDto);
-    return this.gameRepository.findOneBy({ id });
+    return this.findOne(id);
   }
 
   async remove(id: number): Promise<void> {

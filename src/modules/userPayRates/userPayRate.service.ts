@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FindAllUserPayRatesQueryDto } from './dto/find-all-user-pay-rates-query.dto';
-import { MetaI } from 'src/infrastructure/interfaces/Meta.interface';
+import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
 import { UserPayRateEntity } from './userPayRate.entity';
 import { UpdateUserPayRateDto } from './dto/update-userPayRate.dto';
 import { CreateUserPayRateDto } from './dto/create-userPayRate.dto';

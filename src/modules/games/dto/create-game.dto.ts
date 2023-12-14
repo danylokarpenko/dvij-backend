@@ -11,6 +11,10 @@ export class CreateGameDto {
 
   @ApiProperty()
   @IsString()
+  mainIdea: string;
+
+  @ApiProperty()
+  @IsString()
   videoUrl: string;
 
   @ApiProperty()
@@ -42,11 +46,11 @@ export class CreateGameDto {
 
   @ApiProperty()
   @IsInt()
-  retD1: number;
+  d1: number;
 
   @ApiProperty()
   @IsInt()
-  retD7: number;
+  d7: number;
 
   @ApiProperty()
   @IsInt()
@@ -83,4 +87,29 @@ export class CreateGameDto {
   @ApiProperty()
   @IsInt()
   maxAge: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  iStoreLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  googleStoreLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  gitLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  googleDriveLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  trelloLink: string;
 }

@@ -4,7 +4,7 @@ import { Repository, Like } from 'typeorm';
 import { AchievementEntity } from './achievement.entity';
 import { UpdateAchievementDto } from './dto/update-achievement.dto';
 import { CreateAchievementDto } from './dto/create-achievement.dto';
-import { MetaI } from 'src/infrastructure/interfaces/Meta.interface';
+import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
 import { FindAllQueryDto } from './dto/find-all-query.dto';
 
 @Injectable()

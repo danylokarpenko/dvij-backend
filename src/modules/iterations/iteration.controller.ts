@@ -10,6 +10,7 @@ import {
   Param,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { IterationService } from './iteration.service';
 import { CreateIterationDto } from './dto/create-iteration.dto';
@@ -17,6 +18,7 @@ import { UpdateIterationDto } from './dto/update-iteration.dto';
 import { FindAllIterationsQueryDto } from './dto/find-all-iterations-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
@@ -25,8 +27,11 @@ export class IterationController {
   constructor(private readonly iterationService: IterationService) {}
 
   @Post()
-  create(@Body() createIterationDto: CreateIterationDto) {
-    return this.iterationService.create(createIterationDto);
+  create(
+    @Body() createIterationDto: CreateIterationDto,
+    @Request() req: IRequest,
+  ) {
+    return this.iterationService.create(createIterationDto, req);
   }
 
   @Get()

@@ -45,12 +45,12 @@ export class FindAllGamesQueryDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()
-  retD1?: number;
+  d1?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()
-  retD7?: number;
+  d7?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
@@ -81,4 +81,9 @@ export class FindAllGamesQueryDto {
   @IsOptional()
   @IsString()
   sort?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true')
+  isHit?: boolean;
 }

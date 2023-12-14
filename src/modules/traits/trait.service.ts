@@ -7,7 +7,7 @@ import { TraitEntity } from './trait.entity';
 import { CreateTraitDto } from './dto/create-trait.dto';
 import { UpdateTraitDto } from './dto/update-trait.dto';
 
-import { MetaI } from 'src/infrastructure/interfaces/Meta.interface';
+import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
 import { FindAllTraitsQueryDto } from './dto/find-all-traits-query.dto';
 
 @Injectable()

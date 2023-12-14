@@ -2,13 +2,24 @@
 
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import { Transform } from 'class-transformer';
-import { IsString, IsInt, IsDate, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  IsDate,
+  IsOptional,
+  IsBooleanString,
+} from 'class-validator';
 
 export class UpdateGameDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   name?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  mainIdea?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
@@ -50,12 +61,12 @@ export class UpdateGameDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsInt()
-  retD1?: number;
+  d1?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsInt()
-  retD7?: number;
+  d7?: number;
 
   @ApiProperty({ required: false })
   @IsOptional()
@@ -101,4 +112,35 @@ export class UpdateGameDto {
   @IsOptional()
   @IsInt()
   maxAge?: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  iStoreLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  googleStoreLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  gitLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  googleDriveLink: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  trelloLink: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsBooleanString()
+  @Transform(({ value }) => value === 'true')
+  isHit?: boolean;
 }

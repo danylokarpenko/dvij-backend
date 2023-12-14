@@ -1,10 +1,10 @@
-// create-hit-income.dto.ts
+// create-game-income.dto.ts
 
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import { Transform } from 'class-transformer';
 import { IsNumber, IsDate } from 'class-validator';
 
-export class CreateHitIncomeDto {
+export class CreateGameIncomeDto {
   @ApiProperty()
   @IsNumber()
   hitId: number;

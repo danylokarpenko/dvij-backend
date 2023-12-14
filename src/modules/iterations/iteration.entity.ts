@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { UserEntity } from '../users/user.entity';
-import { HitEntity } from '../hits/hit.entity';
+
 import { GameEntity } from '../games/game.entity';
 
 @Entity('iterations')
@@ -25,20 +25,15 @@ export class IterationEntity extends BaseEntity {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', default: 0 })
   likes: number;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   isApproved: boolean;
-
-  @ManyToOne(() => HitEntity, (hit) => hit.iterations)
-  hit: HitEntity;
-  @Column()
-  hitId: number;
 
   @ManyToOne(() => GameEntity, (game) => game.iterations)
   game: GameEntity;
-  @Column()
+  @Column({ nullable: true })
   gameId: number;
 
   @CreateDateColumn()

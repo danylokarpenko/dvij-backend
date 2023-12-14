@@ -1,4 +1,4 @@
-// hit-income.entity.ts
+// game-income.entity.ts
 
 import {
   Entity,
@@ -9,17 +9,17 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { HitEntity } from '../hits/hit.entity';
+import { GameEntity } from '../games/game.entity';
 
-@Entity('hitIncomes')
-export class HitIncomeEntity extends BaseEntity {
+@Entity('gameIncomes')
+export class GameIncomeEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => HitEntity, (hit) => hit.hitIncomes)
-  hit: HitEntity;
-  @Column()
-  hitId: number;
+  @ManyToOne(() => GameEntity, (game) => game.gameIncomes)
+  game: GameEntity;
+  @Column({ nullable: true })
+  gameId: number;
 
   @Column({ type: 'decimal' })
   amount: number;

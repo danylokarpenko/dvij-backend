@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import { Transform } from 'class-transformer';
 import { IsNumber, IsDate, IsOptional } from 'class-validator';
 
-export class UpdateHitIncomeDto {
+export class UpdateGameIncomeDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()

@@ -4,6 +4,7 @@ import { IsInt, IsString, IsBoolean, IsOptional } from 'class-validator';
 export class CreateIterationDto {
   @ApiProperty()
   @IsInt()
+  @IsOptional()
   creatorId: number;
 
   @ApiProperty({ required: false })
@@ -25,9 +26,11 @@ export class CreateIterationDto {
 
   @ApiProperty()
   @IsInt()
+  @IsOptional()
   likes: number;
 
   @ApiProperty()
   @IsBoolean()
+  @IsOptional()
   isApproved: boolean;
 }

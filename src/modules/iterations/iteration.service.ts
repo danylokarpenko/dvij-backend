@@ -7,7 +7,8 @@ import { IterationEntity } from './iteration.entity';
 import { CreateIterationDto } from './dto/create-iteration.dto';
 import { UpdateIterationDto } from './dto/update-iteration.dto';
 import { FindAllIterationsQueryDto } from './dto/find-all-iterations-query.dto';
-import { MetaI } from 'src/infrastructure/interfaces/Meta.interface';
+import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
+import { IRequest } from 'src/infrastructure/interfaces/request.interface';
 
 @Injectable()
 export class IterationService {
@@ -18,9 +19,17 @@ export class IterationService {
 
   async create(
     createIterationDto: CreateIterationDto,
+    req: IRequest,
   ): Promise<IterationEntity> {
-    const iteration = this.iterationRepository.create(createIterationDto);
-    return this.iterationRepository.save(iteration);
+    const iteration = this.iterationRepository.create({
+      ...createIterationDto,
+      creatorId: req.user.id,
+    });
+    const saved = await this.iterationRepository.save(iteration);
+    return this.iterationRepository.findOne({
+      where: { id: saved.id },
+      relations: ['creator'],
+    });
   }
 
   async findAll(
@@ -73,7 +82,10 @@ export class IterationService {
     updateIterationDto: UpdateIterationDto,
   ): Promise<IterationEntity> {
     await this.iterationRepository.update(id, updateIterationDto);
-    return this.iterationRepository.findOneBy({ id });
+    return this.iterationRepository.findOne({
+      where: { id },
+      relations: ['creator'],
+    });
   }
 
   async remove(id: number): Promise<void> {

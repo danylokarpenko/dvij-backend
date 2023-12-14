@@ -8,7 +8,7 @@ import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindAllUsersQuery } from './dto/find-all-users-query.dto';
-import { MetaI } from 'src/infrastructure/interfaces/Meta.interface';
+import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
 
 @Injectable()
 export class UserService {
@@ -64,7 +64,10 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<UserEntity | null> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOne({
+      where: { id },
+      relations: ['gameUsers', 'gameUsers.game'],
+    });
   }
 
   async findOneBy(where): Promise<UserEntity | null> {

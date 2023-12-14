@@ -15,9 +15,9 @@ import { IterationEntity } from '../iterations/iteration.entity';
 import { TalentEntity } from '../talents/talent.entity';
 
 import { AchievementEntity } from '../achievements/achievement.entity';
-import { UserHitsEntity } from '../userHits/userHits.entity';
 import { UserPayRateEntity } from '../userPayRates/userPayRate.entity';
 import { TraitEntity } from '../traits/trait.entity';
+import { GameUsersEntity } from '../gameUsers/gameUsers.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -80,9 +80,6 @@ export class UserEntity extends BaseEntity {
   @JoinTable()
   achievements: AchievementEntity[];
 
-  @OneToMany(() => UserHitsEntity, (userHits) => userHits.user)
-  userHits: UserHitsEntity[];
-
   @OneToMany(() => UserPayRateEntity, (payRate) => payRate.user)
   payRates: UserPayRateEntity[];
 
@@ -93,4 +90,7 @@ export class UserEntity extends BaseEntity {
     inverseJoinColumn: { name: 'traitId', referencedColumnName: 'id' },
   })
   traits: TraitEntity[];
+
+  @OneToMany(() => GameUsersEntity, (gameUser) => gameUser.user)
+  gameUsers: GameUsersEntity[];
 }

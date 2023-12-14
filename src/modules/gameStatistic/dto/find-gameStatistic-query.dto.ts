@@ -1,10 +1,10 @@
-// find-all-hit-incomes-query.dto.ts
+// find-all-game-incomes-query.dto.ts
 
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import { Transform } from 'class-transformer';
 import { IsOptional, IsNumber, IsDate, IsString } from 'class-validator';
 
-export class FindAllHitIncomesQueryDto {
+export class FindAllGameStatisticsQueryDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsNumber()

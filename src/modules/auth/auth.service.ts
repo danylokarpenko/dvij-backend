@@ -40,9 +40,17 @@ export class AuthService {
   }
 
   async login(userPayload: LoginDto) {
+    // Find the user by email
+    const user = await this.userService.findOneBy({ email: userPayload.email });
+
+    // Check if user exists
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
     const accessToken = this.generateAccessToken(userPayload);
     const refreshToken = await this.generateRefreshToken(userPayload);
-    const user = await this.userService.findOneBy({ email: userPayload.email });
+
     return { accessToken, refreshToken, user };
   }
 
