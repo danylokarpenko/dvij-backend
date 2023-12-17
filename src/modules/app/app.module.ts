@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
+// eslint-disable-next-line
+const fs = require('fs');
 
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
@@ -38,6 +40,11 @@ import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
       entities: ['dist/src/modules/**/*.entity.js'],
       migrations: ['dist/migrations/*.js'], // Path to your migrations directory
       migrationsRun: true,
+      ssl: {
+        ca: fs
+          .readFileSync(`/Users/rickkarpenk/Projects/eu-west-3-bundle.pem`)
+          .toString(),
+      },
     }),
     EventEmitterModule.forRoot(),
     UserModule,
