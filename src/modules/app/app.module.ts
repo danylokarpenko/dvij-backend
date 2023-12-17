@@ -41,9 +41,7 @@ import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
       migrations: ['dist/migrations/*.js'], // Path to your migrations directory
       migrationsRun: true,
       ssl: {
-        ca: fs
-          .readFileSync(`/Users/rickkarpenk/Projects/eu-west-3-bundle.pem`)
-          .toString(),
+        ca: fs.readFileSync(`/home/ec2-user/eu-west-3-bundle.pem`).toString(),
       },
     }),
     EventEmitterModule.forRoot(),
