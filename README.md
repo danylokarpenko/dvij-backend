@@ -10,7 +10,7 @@
 then 2 route tables:
 
 3. For public api subnets
-4. for private db subnets
+4. for private db subnets (if wanna db to be publicly accessible- need to assign route to igw(not nat) + Edit inbound rules Type:Postgres, LocalPC IP)
 
 then
 
@@ -61,3 +61,16 @@ source ~/.nvm/nvm.sh
 echo "source ~/.nvm/nvm.sh" >> ~/.bashrc
 nvm install 20.10.0
 ```
+
+# Update EC2 Instance Security Group
+
+You need to configure the security group of your EC2 instance to allow inbound traffic on port 3030:
+
+Open the Amazon EC2 console at https://console.aws.amazon.com/ec2/.
+In the navigation pane, choose 'Instances' and select your instance.
+In the 'Description' tab, find the 'Security groups' section, and click the security group.
+In the 'Inbound rules' tab, choose 'Edit inbound rules'.
+Add a New Rule:
+Type: Custom TCP
+Port Range: 3030
+Source: Choose 'Anywhere' to allow access from any IP (be cautious with this setting in a production environment; it's better to limit to known IPs).
