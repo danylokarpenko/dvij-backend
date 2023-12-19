@@ -40,9 +40,14 @@ import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
       entities: ['dist/src/modules/**/*.entity.js'],
       migrations: ['dist/migrations/*.js'], // Path to your migrations directory
       migrationsRun: true,
-      ssl: {
-        ca: fs.readFileSync(`/home/ec2-user/eu-west-3-bundle.pem`).toString(),
-      },
+      ssl:
+        process.env.NODE_ENV === 'production'
+          ? {
+              ca: fs
+                .readFileSync(`/home/ec2-user/eu-west-3-bundle.pem`)
+                .toString(),
+            }
+          : false,
     }),
     EventEmitterModule.forRoot(),
     UserModule,

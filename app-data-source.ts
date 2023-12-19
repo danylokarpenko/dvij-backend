@@ -15,9 +15,12 @@ const AppDataSource = new DataSource({
   synchronize: false,
   migrationsRun: true,
   logging: true,
-  ssl: {
-    ca: fs.readFileSync(`/home/ec2-user/eu-west-3-bundle.pem`).toString(),
-  },
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? {
+          ca: fs.readFileSync(`/eu-west-3-bundle.pem`).toString(),
+        }
+      : false,
 });
 
 export default AppDataSource;

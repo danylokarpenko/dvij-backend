@@ -4,10 +4,7 @@
 const path = require('node:path');
 
 require('dotenv').config({
-  path: path.join(
-    process.cwd(),
-    `.env${process.env.NODE_ENV === 'production' ? '.production' : '.local'}`,
-  ),
+  path: path.join(process.cwd(), `.env`),
 });
 
 module.exports = {
