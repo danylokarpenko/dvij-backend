@@ -24,6 +24,11 @@ export class UpdateGameDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
+  mainTask?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
   videoUrl?: string;
 
   @ApiProperty({ required: false })
