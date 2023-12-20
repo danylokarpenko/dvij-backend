@@ -7,10 +7,6 @@ import { IsNumber, IsDate } from 'class-validator';
 export class CreateGameIncomeDto {
   @ApiProperty()
   @IsNumber()
-  hitId: number;
-
-  @ApiProperty()
-  @IsNumber()
   amount: number;
 
   @ApiProperty()

@@ -41,6 +41,9 @@ export class GameEntity extends BaseEntity {
   mainIdea: string;
 
   @Column({ type: 'varchar', nullable: true })
+  mainTask: string;
+
+  @Column({ type: 'varchar', nullable: true })
   iStoreLink: string;
 
   @Column({ type: 'varchar', nullable: true })

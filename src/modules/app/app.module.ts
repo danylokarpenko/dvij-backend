@@ -20,6 +20,7 @@ import { TalentsModule } from '../talents/talent.module';
 import { UserPayRateModule } from '../userPayRates/userPayRate.module';
 import { GameUserModule } from '../gameUsers/gameUsers.module';
 import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
+import { IdeaModule } from '../ideas/idea.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
     TalentsModule,
     TraitsModule,
     UserPayRateModule,
+    IdeaModule,
     GameUserModule,
     GameStatisticsModule,
   ],

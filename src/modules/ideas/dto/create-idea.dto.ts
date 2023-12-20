@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import { IsInt, IsString, IsBoolean, IsOptional } from 'class-validator';
 
-export class CreateIterationDto {
+export class CreateIdeaDto {
   @ApiProperty()
   @IsInt()
   @IsOptional()

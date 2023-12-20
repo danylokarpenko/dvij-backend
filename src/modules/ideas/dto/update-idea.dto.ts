@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import { IsInt, IsString, IsBoolean, IsOptional } from 'class-validator';
 
-export class UpdateIterationDto {
+export class UpdateIdeaDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsInt()
@@ -25,11 +25,4 @@ export class UpdateIterationDto {
   @IsOptional()
   @IsBoolean()
   isApproved?: boolean;
-
-  @ApiProperty()
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsInt()
-  @ApiProperty()
-  gameId: number;
 }

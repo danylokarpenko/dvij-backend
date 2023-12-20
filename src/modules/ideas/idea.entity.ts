@@ -10,14 +10,12 @@ import {
 
 import { UserEntity } from '../users/user.entity';
 
-import { GameEntity } from '../games/game.entity';
-
-@Entity('iterations')
-export class IterationEntity extends BaseEntity {
+@Entity('ideas')
+export class IdeaEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.iterations)
+  @ManyToOne(() => UserEntity, (user) => user.ideas)
   creator: UserEntity;
   @Column()
   creatorId: number;
@@ -30,11 +28,6 @@ export class IterationEntity extends BaseEntity {
 
   @Column({ type: 'boolean', default: false })
   isApproved: boolean;
-
-  @ManyToOne(() => GameEntity, (game) => game.iterations)
-  game: GameEntity;
-  @Column({ nullable: true })
-  gameId: number;
 
   @CreateDateColumn()
   createdAt: Date;

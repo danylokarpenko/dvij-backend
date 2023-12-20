@@ -18,6 +18,7 @@ import { AchievementEntity } from '../achievements/achievement.entity';
 import { UserPayRateEntity } from '../userPayRates/userPayRate.entity';
 import { TraitEntity } from '../traits/trait.entity';
 import { GameUsersEntity } from '../gameUsers/gameUsers.entity';
+import { IdeaEntity } from '../ideas/idea.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -75,6 +76,9 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => IterationEntity, (iteration) => iteration.creator)
   iterations: IterationEntity[];
+
+  @OneToMany(() => IdeaEntity, (idea) => idea.creator)
+  ideas: IdeaEntity[];
 
   @ManyToMany(() => AchievementEntity)
   @JoinTable()
