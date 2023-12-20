@@ -18,7 +18,7 @@ const AppDataSource = new DataSource({
   ssl:
     process.env.NODE_ENV === 'production'
       ? {
-          ca: fs.readFileSync(`/home/ec2-user/eu-west-3-bundle.pe`).toString(),
+          ca: fs.readFileSync(`/home/ec2-user/eu-west-3-bundle.pem`).toString(),
         }
       : false,
 });
