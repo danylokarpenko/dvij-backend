@@ -79,16 +79,19 @@ export class GameService {
   }
 
   async findOne(id: number): Promise<GameEntity> {
-    return this.gameRepository.findOne({
-      where: { id },
-      relations: [
-        'gameUsers',
-        'gameUsers.user',
-        'gameStatistics',
-        'iterations',
-        'iterations.creator',
-      ],
-    });
+    const game = await this.gameRepository
+      .createQueryBuilder('game')
+      .leftJoinAndSelect('game.gameUsers', 'gameUsers')
+      .leftJoinAndSelect('gameUsers.user', 'user')
+      .leftJoinAndSelect('game.gameStatistics', 'gameStatistics')
+      .leftJoinAndSelect('game.iterations', 'iterations')
+      .leftJoinAndSelect('iterations.creator', 'creator')
+      .where('game.id = :id', { id })
+      .orderBy({
+        'iterations.createdAt': 'DESC', // Sorting iterations by createdAt in descending order
+      })
+      .getOne();
+    return game;
   }
 
   async update(id: number, updateGameDto: UpdateGameDto): Promise<GameEntity> {
