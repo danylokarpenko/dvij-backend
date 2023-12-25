@@ -2,10 +2,13 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { IterationEntity } from './iteration.entity';
 import { CreateIterationDto } from './dto/create-iteration.dto';
-import { UpdateIterationDto } from './dto/update-iteration.dto';
+import {
+  UpdateIterationDto,
+  UpdateIterationsDto,
+} from './dto/update-iteration.dto';
 import { FindAllIterationsQueryDto } from './dto/find-all-iterations-query.dto';
 import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
 import { IRequest } from 'src/infrastructure/interfaces/request.interface';
@@ -88,7 +91,34 @@ export class IterationService {
     });
   }
 
-  async remove(id: number): Promise<void> {
-    await this.iterationRepository.delete(id);
+  async bulkUpdate({
+    payload: updateIterationsDto,
+  }: UpdateIterationsDto): Promise<IterationEntity[]> {
+    // Find all entities that need to be updated
+    const ids = updateIterationsDto.map((dto) => dto.id);
+    const iterations = await this.iterationRepository.find({
+      where: { id: In(ids) },
+      relations: ['creator'],
+    });
+
+    // Update each entity with the new values
+    const updatedIterations = iterations.map((iteration) => {
+      const updateData = updateIterationsDto.find(
+        (dto) => dto.id === iteration.id,
+      );
+      if (updateData) {
+        return { ...iteration, ...updateData };
+      }
+      return iteration;
+    }) as IterationEntity[];
+
+    // Save all updated entities
+    await this.iterationRepository.save(updatedIterations);
+
+    return updatedIterations;
+  }
+
+  async remove(id: number) {
+    return await this.iterationRepository.delete(id);
   }
 }

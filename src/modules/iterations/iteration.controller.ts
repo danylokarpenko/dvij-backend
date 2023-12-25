@@ -14,7 +14,10 @@ import {
 } from '@nestjs/common';
 import { IterationService } from './iteration.service';
 import { CreateIterationDto } from './dto/create-iteration.dto';
-import { UpdateIterationDto } from './dto/update-iteration.dto';
+import {
+  UpdateIterationDto,
+  UpdateIterationsDto,
+} from './dto/update-iteration.dto';
 import { FindAllIterationsQueryDto } from './dto/find-all-iterations-query.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -42,6 +45,11 @@ export class IterationController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.iterationService.findOne(+id);
+  }
+
+  @Put('bulk-update')
+  bulkUpdate(@Body() updateIterationsDto: UpdateIterationsDto) {
+    return this.iterationService.bulkUpdate(updateIterationsDto);
   }
 
   @Put(':id')

@@ -74,3 +74,8 @@ Add a New Rule:
 Type: Custom TCP
 Port Range: 3030
 Source: Choose 'Anywhere' to allow access from any IP (be cautious with this setting in a production environment; it's better to limit to known IPs).
+
+# MIGRATIONS:
+
+- yarn run gen:mig [migration_name]
+  the mig file will be generated in app's root dir. move it to the migrations dir!

@@ -7,7 +7,7 @@ import {
   IsNotEmpty,
 } from 'class-validator';
 
-export class CreateIterationDto {
+export class CreateTrelloDto {
   @ApiProperty()
   @IsInt()
   @IsOptional()

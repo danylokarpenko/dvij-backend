@@ -1,18 +1,10 @@
 import { ApiProperty } from '@nestjsx/crud/lib/crud';
-import { Transform, Type } from 'class-transformer';
-import {
-  IsInt,
-  IsString,
-  IsBoolean,
-  IsOptional,
-  IsArray,
-  ValidateNested,
-} from 'class-validator';
+import { IsInt, IsString, IsBoolean, IsOptional } from 'class-validator';
 
-export class UpdateIterationDto {
+export class UpdateTrelloDto {
   @ApiProperty({ required: false })
   @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10))
+  @IsInt()
   id?: number;
 
   @ApiProperty({ required: false })
@@ -45,11 +37,4 @@ export class UpdateIterationDto {
   @IsInt()
   @ApiProperty()
   gameId: number;
-}
-
-export class UpdateIterationsDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => UpdateIterationDto)
-  payload: UpdateIterationDto[];
 }

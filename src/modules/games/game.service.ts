@@ -8,6 +8,8 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { FindAllGamesQueryDto } from './dto/find-all-games-query.dto';
 import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
+import { getBoardListsByBoardId } from 'src/api/APIs/Board';
+import { FindAllTrelloQueryDto } from '../trello/dto/find-all-trello-query.dto';
 
 @Injectable()
 export class GameService {
@@ -88,10 +90,28 @@ export class GameService {
       .leftJoinAndSelect('iterations.creator', 'creator')
       .where('game.id = :id', { id })
       .orderBy({
-        'iterations.createdAt': 'DESC', // Sorting iterations by createdAt in descending order
+        'iterations.index': 'ASC', // Sorting iterations by createdAt in descending order
       })
       .getOne();
+    // const isNewTasksInTrello = await this.getIsNewTasksInGame({
+    //   gameId: game.id,
+    // });
+
+    // console.log('isNewTasksInTrello', isNewTasksInTrello);
+
     return game;
+  }
+
+  async getIsNewTasksInGame(query: FindAllTrelloQueryDto) {
+    try {
+      const { gameId } = query;
+      const game = await this.gameRepository.findOneBy({ id: gameId });
+      const res = await getBoardListsByBoardId(game.trelloBoardId);
+
+      return res;
+    } catch (error) {
+      return null;
+    }
   }
 
   async update(id: number, updateGameDto: UpdateGameDto): Promise<GameEntity> {

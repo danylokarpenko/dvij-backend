@@ -17,6 +17,9 @@ export class IterationEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'int', nullable: true })
+  index: number;
+
   @ManyToOne(() => UserEntity, (user) => user.iterations)
   creator: UserEntity;
   @Column()

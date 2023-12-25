@@ -22,6 +22,9 @@ export class GameEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  trelloBoardId: string;
+
   @Column({ type: 'varchar' })
   name: string;
 

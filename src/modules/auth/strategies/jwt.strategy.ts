@@ -12,7 +12,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   constructor(private readonly connection: Connection) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken();
-    console.log('token', token);
 
     super({
       usernameField: 'email',

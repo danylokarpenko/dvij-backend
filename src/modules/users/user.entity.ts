@@ -25,6 +25,9 @@ export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  trelloUserId: string;
+
   @Column({ type: 'varchar', nullable: false })
   email: string;
 

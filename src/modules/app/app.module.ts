@@ -21,6 +21,7 @@ import { UserPayRateModule } from '../userPayRates/userPayRate.module';
 import { GameUserModule } from '../gameUsers/gameUsers.module';
 import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
 import { IdeaModule } from '../ideas/idea.module';
+import { TrelloModule } from '../trello/trello.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { IdeaModule } from '../ideas/idea.module';
       entities: ['dist/src/modules/**/*.entity.js'],
       migrations: ['dist/migrations/*.js'], // Path to your migrations directory
       migrationsRun: true,
+      logging: true,
       ssl:
         process.env.NODE_ENV === 'production'
           ? {
@@ -53,6 +55,7 @@ import { IdeaModule } from '../ideas/idea.module';
     EventEmitterModule.forRoot(),
     UserModule,
     TraitsModule,
+    TrelloModule,
     AchievementModule,
     AuthModule,
     GameModule,

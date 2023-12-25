@@ -18,6 +18,7 @@ module.exports = {
   entities: ['dist/src/modules/**/*.entity{.js,.ts}'],
   migrations: ['dist/src/migrations/*{.js,.ts}'],
   migrationsRun: true,
+  logging: true,
   cli: {
     migrationsDir: process.env.TYPEORM_MIGRATIONS_DIR,
   },
