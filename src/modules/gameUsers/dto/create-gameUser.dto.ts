@@ -14,6 +14,7 @@ export class CreateGameUserDto {
 
   @ApiProperty()
   @IsNumber()
+  @IsOptional()
   bonus: number;
 
   @ApiProperty({ required: false })

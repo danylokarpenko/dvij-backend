@@ -18,6 +18,13 @@ export class GameUsersService {
   ) {}
 
   async create(createGameUserDto: CreateGameUserDto): Promise<GameUsersEntity> {
+    const isExist = await this.gameUserRepository.findOne({
+      where: {
+        userId: createGameUserDto.userId,
+        gameId: createGameUserDto.gameId,
+      },
+    });
+    if (isExist) throw new Error('Game User already exist');
     const gameUser = this.gameUserRepository.create(createGameUserDto);
     const createdGameUser = await this.gameUserRepository.save(gameUser);
     const res = await this.gameUserRepository.findOne({

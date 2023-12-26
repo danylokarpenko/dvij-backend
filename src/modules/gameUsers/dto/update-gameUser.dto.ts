@@ -11,5 +11,6 @@ export class UpdateGameUserDto {
 
   @ApiProperty()
   @IsNumber()
+  @IsOptional()
   bonus: number;
 }
