@@ -21,7 +21,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.userService.findByEmailWithPassword(email);
+    const user = await this.userService.findByWithPassword({ email });
     if (!user) {
       throw new HttpException(
         'Authentication failed. Please check your credentials.',

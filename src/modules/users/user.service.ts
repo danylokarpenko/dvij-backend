@@ -4,11 +4,13 @@ const bcryptjs = require('bcryptjs');
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
+
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindAllUsersQuery } from './dto/find-all-users-query.dto';
 import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UserService {
@@ -74,9 +76,15 @@ export class UserService {
     return this.userRepository.findOne({ where: where });
   }
 
-  async findByEmailWithPassword(email: string): Promise<UserEntity | null> {
+  async findByWithPassword({
+    email,
+    id,
+  }: {
+    id?: number;
+    email?: string;
+  }): Promise<UserEntity | null> {
     const entity = await this.userRepository.findOne({
-      where: { email },
+      where: [{ email }, { id }],
       select: ['id', 'role', 'email', 'firstName', 'lastName', 'passwordHash'],
     });
     return entity;
@@ -86,6 +94,10 @@ export class UserService {
     const { password, ...rest } = createUserDto;
     const saltOrRounds = 10;
     const passwordHash = await bcryptjs.hash(password, saltOrRounds);
+    const isValid = await bcryptjs.compare(password, passwordHash);
+
+    console.log('isValid', isValid);
+
     const user = this.userRepository.create({ ...rest, passwordHash });
     const res = await this.userRepository.save(user);
     delete res.passwordHash;
@@ -122,10 +134,14 @@ export class UserService {
 
   async changePassword(
     userId: number,
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<void> {
-    const user = await this.userRepository.findOneBy({ id: userId });
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<UserEntity> {
+    const { oldPassword, newPassword, newPasswordConfirmation } =
+      changePasswordDto;
+    if (newPassword !== newPasswordConfirmation) {
+      throw new Error('New passwords do not match');
+    }
+    const user = await this.findByWithPassword({ id: userId });
 
     if (!user) {
       throw new Error('User not found');
@@ -146,5 +162,8 @@ export class UserService {
     await this.userRepository.save(user);
 
     await this.invalidateRefreshToken(userId);
+    delete user.passwordHash;
+
+    return user;
   }
 }
