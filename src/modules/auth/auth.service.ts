@@ -41,10 +41,21 @@ export class AuthService {
 
   async login(userPayload: LoginDto) {
     // Find the user by email
-    const user = await this.userService.findOneBy({ email: userPayload.email });
+    const user = await this.userService.findByWithPassword({
+      email: userPayload.email,
+    });
 
     // Check if user exists
     if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Verify the password
+    const isPasswordMatching = await bcryptjs.compare(
+      userPayload.password,
+      user.passwordHash,
+    );
+    if (!isPasswordMatching) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
