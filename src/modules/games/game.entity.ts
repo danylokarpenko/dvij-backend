@@ -22,20 +22,20 @@ export class GameEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', nullable: true, unique: true })
-  trelloBoardId: string;
-
   @Column({ type: 'varchar' })
   name: string;
-
-  @Column({ type: 'boolean', default: false })
-  isHit: boolean;
 
   @Column({ type: 'varchar' })
   videoUrl: string;
 
   @Column({ type: 'varchar' })
   iconUrl: string;
+
+  @Column({ type: 'boolean', default: false })
+  isHit: boolean;
+
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  trelloBoardId: string;
 
   @Column({ type: 'varchar', nullable: true })
   publisherName: string;

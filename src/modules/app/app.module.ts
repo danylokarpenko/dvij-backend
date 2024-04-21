@@ -22,6 +22,7 @@ import { GameUserModule } from '../gameUsers/gameUsers.module';
 import { GameStatisticsModule } from '../gameStatistic/gameStatistic.module';
 import { IdeaModule } from '../ideas/idea.module';
 import { TrelloModule } from '../trello/trello.module';
+import { FileStorageModule } from '../files-storage/files-storage.module';
 
 @Module({
   imports: [
@@ -59,7 +60,7 @@ import { TrelloModule } from '../trello/trello.module';
     AchievementModule,
     AuthModule,
     GameModule,
-    IterationModule,
+    FileStorageModule,
     IterationModule,
     TalentsModule,
     TraitsModule,
