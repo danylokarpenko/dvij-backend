@@ -10,7 +10,6 @@ import { FindAllGamesQueryDto } from './dto/find-all-games-query.dto';
 import { MetaI } from 'src/infrastructure/interfaces/meta.interface';
 import { getBoardListsByBoardId } from 'src/api/APIs/Board';
 import { FindAllTrelloQueryDto } from '../trello/dto/find-all-trello-query.dto';
-import axios from 'axios';
 
 @Injectable()
 export class GameService {
@@ -27,28 +26,9 @@ export class GameService {
   async findAll(
     query: FindAllGamesQueryDto,
   ): Promise<{ data: GameEntity[]; meta: MetaI }> {
-    async function getAlbum(id) {
-      const response = await axios.get(`https://photos.app.goo.gl/${id}`);
-      return response.data;
-    }
-    const regex =
-      /\["(https:\/\/lh3\.googleusercontent\.com\/pw\/[a-zA-Z0-9\-_]*)"/g; // the only difference is the [ at the beginning
-    const extractPhotos = (content) => {
-      const links = [];
-      let match;
-      while ((match = regex.exec(content))) {
-        links.push(match[1]);
-      }
-      return links;
-    };
-    const album = await getAlbum('DcBdZUjNDsR4Yd3y9');
-    const links = extractPhotos(album);
-    // console.log(album);
-    console.log(links);
-
     const {
       page = 1,
-      limit = 10,
+      limit = 100,
       name,
       releaseDate,
       lastPatchDate,
